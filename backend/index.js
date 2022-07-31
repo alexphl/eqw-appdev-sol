@@ -1,5 +1,6 @@
 const express = require("express");
 const pg = require("pg");
+const LRU = require("lru-cache");
 require("dotenv").config();
 
 const app = express();
@@ -23,13 +24,40 @@ const queryHandler = (req, res, next) => {
     .catch(next);
 };
 
+// Caches tokens for rate limiting purposes
+const tokenCache = new LRU({
+  max: 500, // max number of tokens
+  ttl: 60000, // rate limit interval (ms)
+});
+
+const rateLimited = (limitPerInterval, req) => {
+  const limit = limitPerInterval || 10; // Limit per interval, default:10
+  const token = req.socket.remoteAddress; // Use remote address for client tracking
+
+  const tokenCount = tokenCache.get(token) || [0];
+  if (tokenCount[0] === 0) tokenCache.set(token, tokenCount);
+  tokenCount[0] += 1;
+
+  return tokenCount[0] > limit;
+};
+
 app.get("/", (req, res) => {
+  if (rateLimited(10, req)) {
+    res.status(429).send("Rate Limited, please retry later.");
+    return;
+  }
+
   res.send("Welcome to EQ Works 😎");
 });
 
 app.get(
   "/events/hourly",
   (req, res, next) => {
+    if (rateLimited(10, req)) {
+      res.status(429).send("Rate Limited, please retry later.");
+      return;
+    }
+
     req.sqlQuery = `
     SELECT date, hour, events
     FROM public.hourly_events
@@ -44,6 +72,11 @@ app.get(
 app.get(
   "/events/daily",
   (req, res, next) => {
+    if (rateLimited(10, req)) {
+      res.status(429).send("Rate Limited, please retry later.");
+      return;
+    }
+
     req.sqlQuery = `
     SELECT date, SUM(events) AS events
     FROM public.hourly_events
@@ -59,6 +92,11 @@ app.get(
 app.get(
   "/stats/hourly",
   (req, res, next) => {
+    if (rateLimited(10, req)) {
+      res.status(429).send("Rate Limited, please retry later.");
+      return;
+    }
+
     req.sqlQuery = `
     SELECT date, hour, impressions, clicks, revenue
     FROM public.hourly_stats
@@ -73,6 +111,10 @@ app.get(
 app.get(
   "/stats/daily",
   (req, res, next) => {
+    if (rateLimited(10, req)) {
+      res.status(429).send("Rate Limited, please retry later.");
+      return;
+    }
     req.sqlQuery = `
     SELECT date,
         SUM(impressions) AS impressions,
@@ -91,6 +133,10 @@ app.get(
 app.get(
   "/poi",
   (req, res, next) => {
+    if (rateLimited(10, req)) {
+      res.status(429).send("Rate Limited, please retry later.");
+      return;
+    }
     req.sqlQuery = `
     SELECT *
     FROM public.poi;
