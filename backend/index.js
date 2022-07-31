@@ -31,9 +31,14 @@ const tokenCache = new LRU({
   ttl: 60000, // rate limit interval (ms)
 });
 
-// Simple rate limiter
-// Counts requests using lru-cache
-// Adapted from github.com/blackflux/lambda-rate-limiter, inherits same limitations
+/** 
+ * Simple rate limiter
+ * Adapted from github.com/blackflux/lambda-rate-limiter, inherits same benefits/limitations.
+ * 
+ * Counts number of requests per client token, responds with error if request limit is exceeded. 
+ * Uses lru-cache to store token:requestCount pairs.
+ * Cached items have a TTL since last accessed (Default: 60s), facilitating the interval window.
+ */
 const rateLimit = (limitPerInterval) => {
   return function rateLimitMiddleware(req, res, next) {
     const limit = limitPerInterval || 10; // Limit per interval, default:10
