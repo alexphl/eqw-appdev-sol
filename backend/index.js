@@ -24,12 +24,16 @@ const queryHandler = (req, res, next) => {
     .catch(next);
 };
 
-// Caches tokens for rate limiting purposes
+// Caches tokens for rate limiting purposes.
+// Deletes least-recently-used items which we use to set rate limit interval.
 const tokenCache = new LRU({
   max: 500, // max number of tokens
   ttl: 60000, // rate limit interval (ms)
 });
 
+// Simple rate limiter
+// Counts requests using lru-cache
+// Adapted from github.com/blackflux/lambda-rate-limiter, inherits same limitations
 const rateLimit = (limitPerInterval) => {
   return function rateLimitMiddleware(req, res, next) {
     const limit = limitPerInterval || 10; // Limit per interval, default:10
@@ -45,13 +49,13 @@ const rateLimit = (limitPerInterval) => {
   };
 };
 
-app.get("/", rateLimit(10), (req, res) => {
+app.get("/", rateLimit(), (req, res) => {
   res.send("Welcome to EQ Works 😎");
 });
 
 app.get(
   "/events/hourly",
-  rateLimit(10),
+  rateLimit(),
   (req, res, next) => {
     req.sqlQuery = `
     SELECT date, hour, events
@@ -66,7 +70,7 @@ app.get(
 
 app.get(
   "/events/daily",
-  rateLimit(10),
+  rateLimit(),
   (req, res, next) => {
     req.sqlQuery = `
     SELECT date, SUM(events) AS events
@@ -82,7 +86,7 @@ app.get(
 
 app.get(
   "/stats/hourly",
-  rateLimit(10),
+  rateLimit(),
   (req, res, next) => {
     req.sqlQuery = `
     SELECT date, hour, impressions, clicks, revenue
@@ -97,7 +101,7 @@ app.get(
 
 app.get(
   "/stats/daily",
-  rateLimit(10),
+  rateLimit(),
   (req, res, next) => {
     req.sqlQuery = `
     SELECT date,
@@ -116,7 +120,7 @@ app.get(
 
 app.get(
   "/poi",
-  rateLimit(10),
+  rateLimit(),
   (req, res, next) => {
     req.sqlQuery = `
     SELECT *
