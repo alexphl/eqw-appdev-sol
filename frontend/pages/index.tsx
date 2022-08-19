@@ -1,17 +1,17 @@
 import type { NextPage } from "next";
 import Tabs from "./Tabs";
-import Charts from "./Charts";
-import Tables from "./Tables";
-import Geo from "./Geo";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
 const Home: NextPage = () => {
-  const components = [Charts, Tables, Geo];
+  const components = ['Charts', 'Tables', 'Geo'];
   const [selectedTab, setSelectedTab] = useState(0);
-  const [page, setPage] = useState(Charts);
+  const [pagePath, setPagePath] = useState(components[selectedTab]);
+
+  var Page = dynamic(() => import("./" + pagePath));
 
   useEffect(() => {
-    setPage (components[selectedTab]);
+    setPagePath(components[selectedTab]);
   }, [selectedTab]);
 
   return (
@@ -22,7 +22,7 @@ const Home: NextPage = () => {
         </nav>
 
         <main className="grid grid-cols-2 bg-zinc-900">
-          {page}
+          <Page />
         </main>
       </div>
     </>
