@@ -1,12 +1,11 @@
-import { useState } from "react";
 import { Tab } from "@headlessui/react";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Tabs = (props: { selector?: any }) => {
-  const [categories] = useState(["Charts", "Tables", "Geo"]);
+const Tabs = (props: { selector: any, components:string[] }) => {
+  const categories = props.components;
   const [selectedIndex, setSelectedIndex] = props.selector;
 
   return (
