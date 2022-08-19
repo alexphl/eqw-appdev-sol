@@ -5,16 +5,13 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Tabs() {
-  const [categories] = useState([
-    "Charts",
-    "Tables",
-    "Geo",
-  ]);
+const Tabs = (props: { selector?: any }) => {
+  const [categories] = useState(["Charts", "Tables", "Geo"]);
+  const [selectedIndex, setSelectedIndex] = props.selector;
 
   return (
     <div className="w-full max-w-xs px-2 sm:px-0">
-      <Tab.Group>
+      <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
         <Tab.List className="flex space-x-1 rounded-xl bg-zinc-900 p-1">
           {categories.map((category) => (
             <Tab
@@ -36,3 +33,5 @@ export default function Tabs() {
     </div>
   );
 }
+
+export default Tabs;
