@@ -41,7 +41,7 @@ const tokenCache = new LRU({
  */
 const rateLimit = (limitPerInterval) => {
   return function rateLimitMiddleware(req, res, next) {
-    const limit = limitPerInterval || 10; // Limit per interval, default:10
+    const limit = limitPerInterval || 50; // Limit per interval, default:10
     const token = req.socket.remoteAddress; // Use remote address for client tracking
 
     const tokenCount = tokenCache.get(token) || [0];
