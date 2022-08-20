@@ -6,33 +6,37 @@ import { useState } from "react";
  **/
 
 const Charts = () => {
-  const [charts, setCharts] = useState([LineChart]);
+  const [count, setCount] = useState(1);
+  const [charts, setCharts] = useState([{ id: count, component: LineChart }]);
 
   function addChart() {
-    setCharts((charts) => [LineChart, ...charts]);
+    setCharts((charts) => [...charts, { id: count + 1, component: LineChart }]);
+    setCount(count + 1);
   }
 
-  const removeChart = (index: number) => {
-    console.log("removed chart at " + index);
-    setCharts([
-      ...charts.slice(0, index),
-      ...charts.slice(index + 1, charts.length),
-    ]);
+  const removeChart = (id: number) => {
+    const index = charts.findIndex((chart) => chart.id === id);
+
+    if (index > -1) {
+      setCharts(charts.filter((item, i) => i !== index));
+      console.log("removed chart at " + index);
+    }
   };
 
   return (
     <div className="max-w-4xl m-auto">
       {charts.map((Chart, index) => {
         return (
-          <>
-            <Chart key={index} />
-            <button onClick={() => removeChart(index)}> Delete Chart </button>
-          </>
+          <div key={Chart.id}>
+            <Chart.component />
+            <button onClick={() => removeChart(Chart.id)}>
+              Delete Chart {Chart.id}
+            </button>
+          </div>
         );
       })}
 
-      <br />
-      <button onClick={addChart}> Add Chart </button>
+      <button onClick={() => addChart()}> Add Chart </button>
     </div>
   );
 };
