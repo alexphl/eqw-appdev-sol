@@ -1,11 +1,18 @@
 const express = require("express");
 const pg = require("pg");
 const LRU = require("lru-cache");
+const cors = require('cors');
+
 require("dotenv").config();
 
 const app = express();
 // configs come from standard PostgreSQL env vars
 // https://www.postgresql.org/docs/9.6/static/libpq-envars.html
+
+// Set permissive cors policy for dev build
+app.use(cors({
+    origin: '*'
+}));
 
 const pool = new pg.Pool({
   host: process.env.PGHOST,
