@@ -7,13 +7,7 @@ const Home: NextPage = () => {
   // Lazy load feature tab contents
   const components = ["Charts", "Tables", "Geo"];
   const [selectedTab, setSelectedTab] = useState(0);
-  const [pagePath, setPagePath] = useState(components[selectedTab]);
-  
-  var Page = dynamic(() => import("./" + pagePath)); // Component page
-
-  useEffect(() => {
-    setPagePath(components[selectedTab]);
-  }, [selectedTab]);
+  const Page = dynamic(() => import("./" + components[selectedTab]));
 
   return (
     <>
