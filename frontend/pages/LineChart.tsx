@@ -8,13 +8,13 @@ const LineChart = (props: any) => {
     const [url, setUrl] = useState("http://localhost:5555/events/daily");
     const { data, error } = useSWR(url, fetcher);
 
-    // Shows old data if refresh fails
-    if (error && !data)
-        return (
-            <div>
-                Contents failed to load :( <p> Retrying... </p>
-            </div>
-        );
+    // // Shows old data if refresh fails
+    // if (error && !data)
+    //     return (
+    //         <div>
+    //             Contents failed to load :( <p> Retrying... </p>
+    //         </div>
+    //     );
 
     Chart.register(...registerables);
 
@@ -35,7 +35,7 @@ const LineChart = (props: any) => {
             options={{
                 onClick: function (evt, element) {
                     if (element.length > 0) {
-                        console.log(element[0].index);
+                        //console.log(element[0].index);
                         setUrl("http://localhost:5555/events/hourly");
                     }
                 },
