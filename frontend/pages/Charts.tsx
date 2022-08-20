@@ -1,19 +1,26 @@
 import useSWR from "swr";
+import fetcher from "./fetcher";
 import { Bar } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 
+/**
+ * Chart visualizations panel
+ **/
 const Charts = () => {
-  const fetcher = (url: RequestInfo | URL | string) =>
-    fetch(url).then((r) => r.json());
   const { data, error } = useSWR("http://localhost:5555/events/daily", fetcher);
 
-  if (error) return <div>failed to load</div>;
-  console.log(data);
+  // Shows old data if refresh fails
+  if (error && !data)
+    return (
+      <div>
+        Contents failed to load :( <p> Retrying... </p>
+      </div>
+    );
 
   Chart.register(...registerables);
 
   return (
-    <div>
+    <div className="max-w-4xl m-auto">
       <Bar
         data={{
           labels: [],
@@ -21,14 +28,11 @@ const Charts = () => {
             {
               label: "TESTING",
               data: data,
-              backgroundColor: [
-                "rgba(255, 99, 132, 0.7)",
-                "rgba(54, 162, 235, 0.7)",
-                "rgba(255, 206, 86, 0.7)",
-                "rgba(75, 192, 192, 0.7)",
-                "rgba(153, 102, 255, 0.7)",
-                "rgba(255, 159, 64, 0.7)",
-              ],
+              backgroundColor: ["rgba(220, 255, 255, 0.2)"],
+              borderColor: ["rgba(220, 255, 255, 0.6)"],
+              borderWidth: 1,
+              barThickness: 60,
+              borderRadius: 5,
             },
           ],
         }}
@@ -36,6 +40,24 @@ const Charts = () => {
           parsing: {
             xAxisKey: "date",
             yAxisKey: "events",
+          },
+          plugins: {
+            legend: {
+              position: "top",
+              align: "center",
+              labels: {
+                boxWidth: 20,
+                usePointStyle: false,
+              },
+              title: {
+                text: "Daily events",
+                display: false,
+                color: "white",
+                font: {
+                  size: 10,
+                },
+              },
+            },
           },
         }}
       />

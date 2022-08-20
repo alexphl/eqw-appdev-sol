@@ -1,14 +1,15 @@
 import type { NextPage } from "next";
-import Tabs from "./Tabs";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import Tabs from "./Tabs";
 
 const Home: NextPage = () => {
+  // Lazy load feature tab contents
   const components = ["Charts", "Tables", "Geo"];
   const [selectedTab, setSelectedTab] = useState(0);
   const [pagePath, setPagePath] = useState(components[selectedTab]);
-
-  var Page = dynamic(() => import("./" + pagePath));
+  
+  var Page = dynamic(() => import("./" + pagePath)); // Component page
 
   useEffect(() => {
     setPagePath(components[selectedTab]);
@@ -21,7 +22,7 @@ const Home: NextPage = () => {
           <Tabs components={components} selector={[selectedTab, setSelectedTab]} />
         </nav>
 
-        <main className="bg-zinc-900">
+        <main>
           <Page />
         </main>
       </div>
