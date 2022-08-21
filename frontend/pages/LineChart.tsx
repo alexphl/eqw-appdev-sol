@@ -2,10 +2,10 @@ import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import useSWR from "swr";
 import fetcher from "./fetcher";
-import { useState } from "react";
+import useLocalStorageState from "use-local-storage-state";
 
-const LineChart = (props: any) => {
-    const [url, setUrl] = useState("http://localhost:5555/events/daily");
+const LineChart = (props: {id: string}) => {
+    const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {defaultValue: "http://localhost:5555/events/daily"});
     const { data, error } = useSWR(url, fetcher);
 
     // // Shows old data if refresh fails

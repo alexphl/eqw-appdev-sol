@@ -21,6 +21,12 @@ const Charts = () => {
       setCharts(charts.filter((item, i) => i !== index));
       console.log("removed chart at " + index);
     }
+
+    localStorage.removeItem("ChartURL:" + id);
+
+    console.log(charts.length);
+
+    if (charts.length == 1) {setCount(0)}
   };
 
   return (
@@ -28,7 +34,7 @@ const Charts = () => {
       {charts.map((Chart, index) => {
         return (
           <div key={Chart.id}>
-            <LineChart />
+            <LineChart id={Chart.id}/>
             <button onClick={() => removeChart(Chart.id)}>
               Delete Chart {Chart.id}
             </button>
