@@ -4,7 +4,7 @@ import useSWR from "swr";
 import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
 
-const LineChart = (props: {id: string}) => {
+const LineChart = (props: {id: number}) => {
     const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {defaultValue: "http://localhost:5555/events/daily"});
     const { data, error } = useSWR(url, fetcher);
 
