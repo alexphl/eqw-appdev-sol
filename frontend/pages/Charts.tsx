@@ -1,22 +1,25 @@
 import LineChart from "./LineChart";
 import useLocalStorageState from "use-local-storage-state";
 import { XIcon } from "@heroicons/react/solid";
+import Listbox from "./Listbox"
 
 /**
  * Chart visualizations panel
  **/
 const Charts = () => {
+  //localStorage.removeItem("charts");
+
   const [count, setCount] = useLocalStorageState("chartCount", {
     defaultValue: 1,
   });
   const [charts, setCharts] = useLocalStorageState("charts", {
-    defaultValue: [{ id: count, component: "LineChart" }],
+    defaultValue: [{ id: count, component: "LineChart", mode: "events" }],
   });
 
   function addChart() {
     setCharts((charts) => [
       ...charts,
-      { id: count + 1, component: "LineChart" },
+      { id: count + 1, component: "LineChart", mode: "events" },
     ]);
     setCount(count + 1);
   }
@@ -53,7 +56,7 @@ const Charts = () => {
               Chart {Chart.id}
             </div>
             <div className="p-6">
-              <LineChart id={Chart.id} url={{daily: "http://localhost:5555/events/daily", hourly:"http://localhost:5555/events/hourly"}} axis={{x:"date", y:"events"}}/>
+              <LineChart id={Chart.id} mode={Chart.mode}/>
             </div>
           </div>
         );

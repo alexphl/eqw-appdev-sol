@@ -4,17 +4,28 @@ import useSWR from "swr";
 import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
 
-const LineChart = (props: {id: number, url: {daily:string, hourly:string}, axis: {x:string, y:string}}) => {
-    const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {defaultValue: props.url.daily});
-    const { data, error } = useSWR(url, fetcher);
+const LineChart = (props: { id: number; mode: string }) => {
+    const modes = {
+        events: {
+            urls: {
+                daily: "http://localhost:5555/events/daily",
+                hourly: "http://localhost:5555/events/hourly",
+            },
+            axis: {x: 'date', y: 'events'}
+        },
+        stats: {
+            urls: {
+                daily: "http://localhost:5555/stats/daily",
+                hourly: "http://localhost:5555/stats/hourly",
+            },
+            axis: {x: 'date', y: 'events'}
+        },
+    };
 
-    // // Shows old data if refresh fails
-    // if (error && !data)
-    //     return (
-    //         <div>
-    //             Contents failed to load :( <p> Retrying... </p>
-    //         </div>
-    //     );
+    const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {
+        defaultValue: modes[props.mode].urls.daily,
+    });
+    const { data, error } = useSWR(url, fetcher);
 
     Chart.register(...registerables);
 
@@ -36,13 +47,13 @@ const LineChart = (props: {id: number, url: {daily:string, hourly:string}, axis:
                 onClick: function (evt, element) {
                     if (element.length > 0) {
                         //console.log(element[0].index);
-                        setUrl(props.url.hourly);
+                        setUrl(modes[props.mode].urls.hourly);
                     }
                 },
                 animations: {},
                 parsing: {
-                    xAxisKey: props.axis.x,
-                    yAxisKey: props.axis.y,
+                    xAxisKey: modes[props.mode].axis.x,
+                    yAxisKey: modes[props.mode].axis.y,
                 },
                 elements: {
                     point: {
