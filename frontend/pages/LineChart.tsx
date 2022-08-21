@@ -11,14 +11,14 @@ const LineChart = (props: { id: number; mode: string }) => {
                 daily: "http://localhost:5555/events/daily",
                 hourly: "http://localhost:5555/events/hourly",
             },
-            axis: {x: 'date', y: 'events'}
+            axis: { x: "date", y: "events" },
         },
         stats: {
             urls: {
                 daily: "http://localhost:5555/stats/daily",
                 hourly: "http://localhost:5555/stats/hourly",
             },
-            axis: {x: 'date', y: 'events'}
+            axis: { x: "date", y: "events" },
         },
     };
 

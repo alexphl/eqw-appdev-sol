@@ -4,7 +4,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Tabs = (props: { selector: any, components:string[] }) => {
+const Tabs = (props: { selector: any; components: string[] }) => {
   const categories = props.components;
   const [selectedIndex, setSelectedIndex] = props.selector;
 
@@ -31,6 +31,6 @@ const Tabs = (props: { selector: any, components:string[] }) => {
       </Tab.Group>
     </div>
   );
-}
+};
 
 export default Tabs;

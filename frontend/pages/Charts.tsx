@@ -1,7 +1,7 @@
 import LineChart from "./LineChart";
 import useLocalStorageState from "use-local-storage-state";
 import { XIcon } from "@heroicons/react/solid";
-import Listbox from "./Listbox"
+import Listbox from "./Listbox";
 
 /**
  * Chart visualizations panel
@@ -56,7 +56,7 @@ const Charts = () => {
               Chart {Chart.id}
             </div>
             <div className="p-6">
-              <LineChart id={Chart.id} mode={Chart.mode}/>
+              <LineChart id={Chart.id} mode={Chart.mode} />
             </div>
           </div>
         );
