@@ -30,22 +30,32 @@ const LineChart = (props: { id: number; mode: string }) => {
   });
   const { data, error } = useSWR(url, fetcher);
   const [processedData, setProcessedData] = useState(data);
+  const [selectedDate, setSelectedDate] = useState();
 
   useEffect(() => {
-    var newData = data;
-    if (newData && url === modes[props.mode].urls.daily && newData[0].date.indexOf("T") != -1) {
-      for (var i = 0; i < data.length; i++) {
-        newData[i].date = newData[i].date.substring(
-          0,
-          newData[i].date.indexOf("T")
-        );
+    if (data) {
+      var newData = data;
+      const trimIndex = newData[0].date.indexOf("T");
+
+      if (url === modes[props.mode].urls.daily && trimIndex != -1) {
+        for (var i = 0; i < data.length; i++) {
+          newData[i].date = newData[i].date.substring(0, trimIndex);
+        }
+        setProcessedData(newData);
+      } else {
+        setProcessedData(data);
       }
-      console.log(newData);
-      setProcessedData(newData);
-    } else {
-      setProcessedData(data);
+
+      //console.log(newData);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (selectedDate) {
+      console.log("Selected date " + selectedDate);
+      setUrl(modes[props.mode].urls.hourly);
+    }
+  }, [selectedDate]);
 
   return (
     <Line
@@ -55,17 +65,17 @@ const LineChart = (props: { id: number; mode: string }) => {
           {
             label: "Events",
             data: processedData,
-            backgroundColor: ["rgba(220, 255, 255, 0.2)"],
-            borderColor: ["rgba(220, 255, 255, 0.6)"],
+            backgroundColor: ["rgba(220, 255, 255, 0.4)"],
+            borderColor: ["rgba(220, 255, 255, 0.7)"],
             borderWidth: 1,
+            borderDash: [5, 10],
           },
         ],
       }}
       options={{
         onClick: function (_evt, element) {
           if (element.length > 0) {
-            //console.log(element[0].index);
-            setUrl(modes[props.mode].urls.hourly);
+            setSelectedDate(processedData[element[0].index].date);
           }
         },
         animations: {},
@@ -75,9 +85,9 @@ const LineChart = (props: { id: number; mode: string }) => {
         },
         elements: {
           point: {
-            radius: 8,
-            hitRadius: 50,
-            hoverRadius: 10,
+            radius: 10,
+            hitRadius: 60,
+            hoverRadius: 15,
           },
           line: {
             tension: 0.3,
