@@ -1,16 +1,16 @@
 import LineChart from "./LineChart";
-import { useState } from "react";
+import useLocalStorageState from "use-local-storage-state";
 
 /**
  * Chart visualizations panel
  **/
 
 const Charts = () => {
-  const [count, setCount] = useState(1);
-  const [charts, setCharts] = useState([{ id: count, component: LineChart }]);
+  const [count, setCount] = useLocalStorageState("chartCount", {defaultValue: 1});
+  const [charts, setCharts] = useLocalStorageState('charts', {defaultValue: [{ id: count, component: 'LineChart' }]});
 
   function addChart() {
-    setCharts((charts) => [...charts, { id: count + 1, component: LineChart }]);
+    setCharts((charts) => [...charts, { id: count + 1, component: 'LineChart' }]);
     setCount(count + 1);
   }
 
@@ -28,7 +28,7 @@ const Charts = () => {
       {charts.map((Chart, index) => {
         return (
           <div key={Chart.id}>
-            <Chart.component />
+            <LineChart />
             <button onClick={() => removeChart(Chart.id)}>
               Delete Chart {Chart.id}
             </button>
