@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 
@@ -32,7 +32,7 @@ const TermListbox = (props: { terms: any; selector: any }) => {
             leaveTo="transform scale-95 opacity-0"
           >
             <Listbox.Options className="absolute mt-1 max-h-60 w-max overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {terms.map((term, code) => (
+              {terms.map((term:any, code:any) => (
                 <Listbox.Option
                   key={code}
                   className={({ active }) =>

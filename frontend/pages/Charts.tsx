@@ -28,7 +28,7 @@ const Charts = () => {
     const index = charts.findIndex((chart) => chart.id === id);
 
     if (index > -1) {
-      setCharts(charts.filter((item, i) => i !== index));
+      setCharts(charts.filter((_item, i) => i !== index));
       console.log("removed chart at " + index);
     }
 
@@ -40,7 +40,7 @@ const Charts = () => {
 
   return (
     <div className="max-w-4xl m-auto">
-      {charts.map((Chart, index) => {
+      {charts.map((Chart, _index) => {
         return (
           <div
             key={Chart.id}

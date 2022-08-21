@@ -5,7 +5,7 @@ import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
 
 const LineChart = (props: { id: number; mode: string }) => {
-    const modes = {
+    const modes: { [key: string]: any } = {
         events: {
             urls: {
                 daily: "http://localhost:5555/events/daily",
@@ -44,7 +44,7 @@ const LineChart = (props: { id: number; mode: string }) => {
                 ],
             }}
             options={{
-                onClick: function (evt, element) {
+                onClick: function (_evt, element) {
                     if (element.length > 0) {
                         //console.log(element[0].index);
                         setUrl(modes[props.mode].urls.hourly);
