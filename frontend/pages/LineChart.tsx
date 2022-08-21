@@ -4,8 +4,8 @@ import useSWR from "swr";
 import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
 
-const LineChart = (props: {id: number}) => {
-    const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {defaultValue: "http://localhost:5555/events/daily"});
+const LineChart = (props: {id: number, url: {daily:string, hourly:string}, axis: {x:string, y:string}}) => {
+    const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {defaultValue: props.url.daily});
     const { data, error } = useSWR(url, fetcher);
 
     // // Shows old data if refresh fails
@@ -36,13 +36,13 @@ const LineChart = (props: {id: number}) => {
                 onClick: function (evt, element) {
                     if (element.length > 0) {
                         //console.log(element[0].index);
-                        setUrl("http://localhost:5555/events/hourly");
+                        setUrl(props.url.hourly);
                     }
                 },
                 animations: {},
                 parsing: {
-                    xAxisKey: "date",
-                    yAxisKey: "events",
+                    xAxisKey: props.axis.x,
+                    yAxisKey: props.axis.y,
                 },
                 elements: {
                     point: {
