@@ -29,7 +29,7 @@ const LineChart = (props: { id: number; mode: string }) => {
     defaultValue: modes[props.mode].urls.daily,
   });
   const { data, error } = useSWR(url, fetcher);
-  const [processedData, setProcessedData] = useState(data);
+  const [processedData, setProcessedData] = useLocalStorageState("ChartData" + props.id, data);
   const [selectedDate, setSelectedDate] = useLocalStorageState(
     "ChartSelectedDate" + props.id,
     { defaultValue: null }
@@ -56,15 +56,12 @@ const LineChart = (props: { id: number; mode: string }) => {
           newData[i].hour = newData[i].hour.toString();
         }
 
-
         newData = newData.filter(function (obj: { date: any }) {
           return obj.date === selectedDate;
         });
       }
 
       setProcessedData(newData);
-      console.log(xAxisKey);
-      console.log(newData);
     }
   }, [data]);
 
@@ -72,7 +69,7 @@ const LineChart = (props: { id: number; mode: string }) => {
     if (selectedDate && url === modes[props.mode].urls.daily) {
       console.log("Selected date " + selectedDate);
       setUrl(modes[props.mode].urls.hourly);
-      setXAxisKey('hour');
+      setXAxisKey("hour");
     }
   }, [selectedDate]);
 

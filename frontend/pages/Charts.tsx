@@ -35,6 +35,8 @@ const Charts = () => {
     localStorage.removeItem("ChartURL:" + id);
     localStorage.removeItem("ChartSelectedDate" + id);
     localStorage.removeItem("ChartXAxisKey" + id);
+    localStorage.removeItem("ChartData" + id);
+    
     
     if (charts.length == 1) {
       setCount(0);
