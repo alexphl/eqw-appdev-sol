@@ -3,7 +3,7 @@ import { Chart, registerables } from "chart.js";
 import useSWR from "swr";
 import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const LineChart = (props: { id: number; mode: string }) => {
   Chart.register(...registerables);
@@ -28,8 +28,9 @@ const LineChart = (props: { id: number; mode: string }) => {
   const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {
     defaultValue: modes[props.mode].urls.daily,
   });
-  const { data, error } = useSWR(url, fetcher);
-  const [processedData, setProcessedData] = useLocalStorageState("ChartData" + props.id, data);
+  const { data } = useSWR(url, fetcher);
+  const [processedData, setProcessedData]: [any, any, any] =
+    useLocalStorageState("ChartData" + props.id, data);
   const [selectedDate, setSelectedDate] = useLocalStorageState(
     "ChartSelectedDate" + props.id,
     { defaultValue: null }
@@ -39,11 +40,13 @@ const LineChart = (props: { id: number; mode: string }) => {
     { defaultValue: modes[props.mode].axis.x }
   );
 
+  // Process data updates
   useEffect(() => {
     if (data) {
       var newData = data;
-      const trimIndex = newData[0].date.indexOf("T");
 
+      // Use sane date formatting
+      const trimIndex = newData[0].date.indexOf("T");
       if (props.mode === "events" && trimIndex != -1) {
         for (var i = 0; i < data.length; i++) {
           newData[i].date = newData[i].date.substring(0, trimIndex);
@@ -52,13 +55,14 @@ const LineChart = (props: { id: number; mode: string }) => {
 
       // If in hour view, filter by selected date
       if (url === modes[props.mode].urls.hourly) {
-        for (var i = 0; i < data.length; i++) {
-          newData[i].hour = newData[i].hour.toString();
-        }
-
         newData = newData.filter(function (obj: { date: any }) {
           return obj.date === selectedDate;
         });
+
+        // We also need hour value to be a string for Chart.js to work
+        for (var i = 0; i < newData.length; i++) {
+          newData[i].hour = newData[i].hour.toString();
+        }
       }
 
       setProcessedData(newData);
@@ -67,7 +71,6 @@ const LineChart = (props: { id: number; mode: string }) => {
 
   useEffect(() => {
     if (selectedDate && url === modes[props.mode].urls.daily) {
-      console.log("Selected date " + selectedDate);
       setUrl(modes[props.mode].urls.hourly);
       setXAxisKey("hour");
     }
@@ -90,7 +93,7 @@ const LineChart = (props: { id: number; mode: string }) => {
       }}
       options={{
         onClick: function (_evt, element) {
-          if (element.length > 0) {
+          if (element.length > 0 && processedData) {
             setSelectedDate(processedData[element[0].index].date);
           }
         },
