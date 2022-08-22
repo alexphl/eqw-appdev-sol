@@ -30,32 +30,43 @@ const LineChart = (props: { id: number; mode: string }) => {
   });
   const { data, error } = useSWR(url, fetcher);
   const [processedData, setProcessedData] = useState(data);
-  const [selectedDate, setSelectedDate] = useState();
+  const [selectedDate, setSelectedDate] = useLocalStorageState("ChartSelectedDate" + props.id, {defaultValue: null});
+  const [xAxisKey, setXAxisKey] = useLocalStorageState("ChartXAxisKey" + props.id, {defaultValue: modes[props.mode].axis.x});
 
   useEffect(() => {
     if (data) {
       var newData = data;
       const trimIndex = newData[0].date.indexOf("T");
 
-      if (url === modes[props.mode].urls.daily && trimIndex != -1) {
+      if (props.mode === "events" && trimIndex != -1) {
         for (var i = 0; i < data.length; i++) {
           newData[i].date = newData[i].date.substring(0, trimIndex);
         }
+
         setProcessedData(newData);
       } else {
         setProcessedData(data);
       }
-
-      //console.log(newData);
     }
   }, [data]);
 
   useEffect(() => {
-    if (selectedDate) {
+    if (selectedDate && url === modes[props.mode].urls.daily) {
       console.log("Selected date " + selectedDate);
       setUrl(modes[props.mode].urls.hourly);
     }
   }, [selectedDate]);
+
+  useEffect(() => {
+    if (data && url === modes[props.mode].urls.hourly) {
+      var newData = data.filter(function (obj: { date: any }) {
+        return obj.date === selectedDate;
+      });
+
+      setXAxisKey("hour");
+      console.log(newData);
+    }
+  }, [url]);
 
   return (
     <Line
@@ -80,7 +91,7 @@ const LineChart = (props: { id: number; mode: string }) => {
         },
         animations: {},
         parsing: {
-          xAxisKey: modes[props.mode].axis.x,
+          xAxisKey: xAxisKey,
           yAxisKey: modes[props.mode].axis.y,
         },
         elements: {
