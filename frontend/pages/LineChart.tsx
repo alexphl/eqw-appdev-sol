@@ -9,14 +9,14 @@ const LineChart = (props: { id: number; mode: string }) => {
   Chart.register(...registerables);
 
   const modes: { [key: string]: any } = {
-    events: {
+    Events: {
       urls: {
         daily: "http://localhost:5555/events/daily",
         hourly: "http://localhost:5555/events/hourly",
       },
       axis: { x: "date", y: "events" },
     },
-    stats: {
+    Stats: {
       urls: {
         daily: "http://localhost:5555/stats/daily",
         hourly: "http://localhost:5555/stats/hourly",
@@ -47,7 +47,7 @@ const LineChart = (props: { id: number; mode: string }) => {
 
       // Use sane date formatting
       const trimIndex = newData[0].date.indexOf("T");
-      if (props.mode === "events" && trimIndex != -1) {
+      if (props.mode === "Events" && trimIndex != -1) {
         for (var i = 0; i < data.length; i++) {
           newData[i].date = newData[i].date.substring(0, trimIndex);
         }
@@ -117,6 +117,11 @@ const LineChart = (props: { id: number; mode: string }) => {
             display: false,
           },
         },
+        scales: {
+        y: {
+            beginAtZero: true
+        }
+    },
       }}
     />
   );

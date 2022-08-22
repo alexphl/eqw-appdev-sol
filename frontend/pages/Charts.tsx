@@ -1,7 +1,7 @@
 import LineChart from "./LineChart";
 import useLocalStorageState from "use-local-storage-state";
 import { XIcon } from "@heroicons/react/solid";
-import Listbox from "./Listbox";
+import ModeListbox from "./Listbox";
 
 /**
  * Chart visualizations panel
@@ -13,13 +13,13 @@ const Charts = () => {
     defaultValue: 1,
   });
   const [charts, setCharts] = useLocalStorageState("charts", {
-    defaultValue: [{ id: count, component: "LineChart", mode: "events" }],
+    defaultValue: [{ id: count, component: "LineChart", mode: "Events" }],
   });
 
   function addChart() {
     setCharts((charts) => [
       ...charts,
-      { id: count + 1, component: "LineChart", mode: "events" },
+      { id: count + 1, component: "LineChart", mode: "Events" },
     ]);
     setCount(count + 1);
   }
@@ -49,16 +49,17 @@ const Charts = () => {
         return (
           <div
             key={Chart.id}
-            className="my-4 bg-zinc-900 px-1 py-3 rounded-xl shadow-lg"
+            className="my-4 bg-zinc-900 px-1 py-2 rounded-xl shadow-lg"
           >
-            <div>
+            <div className="grid grid-cols-[20%_1fr_20%] px-1.5 grid-rows-1 h-8 place-content-between">
+            <ModeListbox selected={Chart.mode} selector={null}/>
+              <div className="font-semibold col-start-2 h-min text-center self-center text-sm"> Chart {Chart.id} </div>
               <button
-                className="bg-white/[0.1] p-1 mx-2 rounded-md"
+                className="bg-white/[0.03] hover:bg-rose-400/[0.6] text-zinc-300 hover:text-zinc-900 p-1 rounded-md w-min h-min col-start-3 justify-self-end self-center"
                 onClick={() => removeChart(Chart.id)}
               >
-                <XIcon className="h-5 w-5" />
+                <XIcon className="w-5 h-5" />
               </button>
-              Chart {Chart.id}
             </div>
             <div className="p-6">
               <LineChart id={Chart.id} mode={Chart.mode} />
