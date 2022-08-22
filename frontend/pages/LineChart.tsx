@@ -30,8 +30,14 @@ const LineChart = (props: { id: number; mode: string }) => {
   });
   const { data, error } = useSWR(url, fetcher);
   const [processedData, setProcessedData] = useState(data);
-  const [selectedDate, setSelectedDate] = useLocalStorageState("ChartSelectedDate" + props.id, {defaultValue: null});
-  const [xAxisKey, setXAxisKey] = useLocalStorageState("ChartXAxisKey" + props.id, {defaultValue: modes[props.mode].axis.x});
+  const [selectedDate, setSelectedDate] = useLocalStorageState(
+    "ChartSelectedDate" + props.id,
+    { defaultValue: null }
+  );
+  const [xAxisKey, setXAxisKey] = useLocalStorageState(
+    "ChartXAxisKey" + props.id,
+    { defaultValue: modes[props.mode].axis.x }
+  );
 
   useEffect(() => {
     if (data) {
@@ -42,11 +48,23 @@ const LineChart = (props: { id: number; mode: string }) => {
         for (var i = 0; i < data.length; i++) {
           newData[i].date = newData[i].date.substring(0, trimIndex);
         }
-
-        setProcessedData(newData);
-      } else {
-        setProcessedData(data);
       }
+
+      // If in hour view, filter by selected date
+      if (url === modes[props.mode].urls.hourly) {
+        for (var i = 0; i < data.length; i++) {
+          newData[i].hour = newData[i].hour.toString();
+        }
+
+
+        newData = newData.filter(function (obj: { date: any }) {
+          return obj.date === selectedDate;
+        });
+      }
+
+      setProcessedData(newData);
+      console.log(xAxisKey);
+      console.log(newData);
     }
   }, [data]);
 
@@ -54,19 +72,9 @@ const LineChart = (props: { id: number; mode: string }) => {
     if (selectedDate && url === modes[props.mode].urls.daily) {
       console.log("Selected date " + selectedDate);
       setUrl(modes[props.mode].urls.hourly);
+      setXAxisKey('hour');
     }
   }, [selectedDate]);
-
-  useEffect(() => {
-    if (data && url === modes[props.mode].urls.hourly) {
-      var newData = data.filter(function (obj: { date: any }) {
-        return obj.date === selectedDate;
-      });
-
-      setXAxisKey("hour");
-      console.log(newData);
-    }
-  }, [url]);
 
   return (
     <Line
