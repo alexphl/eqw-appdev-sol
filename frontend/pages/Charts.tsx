@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import useLocalStorageState from "use-local-storage-state";
 import { XIcon, PlusIcon } from "@heroicons/react/solid";
 import ModeListbox from "./Listbox";
+import { Suspense } from "react";
 
 const EventChart = dynamic(() => import("./EventChart"));
 const StatsChart = dynamic(() => import("./StatsChart"));
@@ -24,7 +25,7 @@ const Charts = () => {
     setCount(count + 1);
   }
 
-  function clearChartStorage(id:number) {
+  function clearChartStorage(id: number) {
     localStorage.removeItem("ChartURL:" + id);
     localStorage.removeItem("ChartSelectedDate" + id);
     localStorage.removeItem("ChartXAxisKey" + id);
@@ -52,7 +53,7 @@ const Charts = () => {
         return (
           <div
             key={Chart.id}
-            className="my-4 bg-neutral-900 rounded-2xl shadow-md"
+            className="my-4 bg-neutral-900 rounded-2xl shadow-md min-h-[30vw] xl:min-h-[24vw] 2xl:min-h-[15vw]"
           >
             <div className="grid grid-cols-[20%_1fr_20%] px-3 py-6 grid-rows-1 h-4 sticky z-1 top-0 bg-neutral-900/[0.1] backdrop-blur-2xl hover:backdrop-filter-none hover:bg-neutral-900 rounded-t-2xl">
               <ModeListbox
@@ -71,13 +72,19 @@ const Charts = () => {
                 <XIcon className="w-8 h-4" />
               </button>
             </div>
-            <div className="px-4 pb-1 -mt-1 min-h-[200px] transition-all h-fit">
-              {Chart.mode === "Events" && (
-                <EventChart id={Chart.id} mode={Chart.mode}/>
-              )}
-              {Chart.mode === "Stats" && (
-                <StatsChart id={Chart.id} mode={Chart.mode}/>
-              )}
+            <div className="px-4 pb-1 -mt-1">
+              <Suspense
+                fallback={
+                  <div className="m-auto w-full"> Loading... </div>
+                }
+              >
+                {Chart.mode === "Events" && (
+                  <EventChart id={Chart.id} mode={Chart.mode} />
+                )}
+                {Chart.mode === "Stats" && (
+                  <StatsChart id={Chart.id} mode={Chart.mode} />
+                )}
+              </Suspense>
             </div>
           </div>
         );
