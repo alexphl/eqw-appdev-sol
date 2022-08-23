@@ -17,7 +17,7 @@ const Tabs = (props: { selector: any; components: string[] }) => {
               key={category}
               className={({ selected }) =>
                 classNames(
-                  "w-full rounded-lg py-2 text-sm font-bold leading-5 focus:outline-none",
+                  "w-full rounded-lg py-1.5 text-sm font-bold leading-5 focus:outline-none",
                   selected
                     ? "bg-zinc-800 shadow font-extrabold text-white/[0.95]"
                     : "text-zinc-500 hover:bg-white/[0.04] hover:text-white/[0.90]"

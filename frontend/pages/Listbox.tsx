@@ -25,10 +25,10 @@ const ModeListbox = (props: { selected: any; chartController: any; id:number}) =
   }, [selected]);
 
   return (
-    <div className="w-max font-bold text-zinc-300 self-center text-sm">
+    <div className="w-max font-bold text-zinc-300 self-center text-sm z-50">
       <Listbox value={selected} onChange={setSelected}>
         <div className="relative">
-          <Listbox.Button className="relative w-full cursor-default rounded-md hover:bg-white/[0.03] py-1 pl-3 pr-7 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300">
+          <Listbox.Button className="relative w-full cursor-default rounded-lg hover:bg-white/[0.06] py-1 pl-2 pr-7 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300">
             <span className="block truncate">{selected}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <SelectorIcon
@@ -45,13 +45,13 @@ const ModeListbox = (props: { selected: any; chartController: any; id:number}) =
             leaveFrom="transform scale-100 opacity-100"
             leaveTo="transform scale-95 opacity-0"
           >
-            <Listbox.Options className="absolute mt-1 max-h-60 w-max overflow-auto rounded-md bg-zinc-800 py-1 text-sm shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-max overflow-auto rounded-lg backdrop-blur-2xl bg-zinc-300/[0.05] py-1 text-sm shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               {modes.map((mode: any) => (
                 <Listbox.Option
                   key={mode}
                   className={({ active }) =>
-                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                      active ? "bg-teal-100/[0.1] text-teal-200" : "text-white"
+                    `relative z-99 cursor-default select-none py-2 pl-10 pr-4 ${
+                      active ? "bg-teal-100/[0.08] text-teal-200" : "text-white"
                     }`
                   }
                   value={mode}
