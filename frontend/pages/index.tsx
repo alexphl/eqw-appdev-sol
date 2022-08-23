@@ -13,7 +13,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="py-4 px-12 2xl:py-6" id="app">
+      <div className="px-12 py-6 transform-gpu" id="app">
         <nav className="mb-6 flex content-center justify-center space-x-6">
           <Tabs
             components={components}
@@ -21,7 +21,7 @@ const Home: NextPage = () => {
           />
         </nav>
 
-        <main>
+        <main className="transform-gpu transition-all">
           <Page />
         </main>
       </div>
