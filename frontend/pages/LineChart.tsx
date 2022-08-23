@@ -5,7 +5,11 @@ import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
 import { useEffect } from "react";
 
-const LineChart = (props: { id: number; mode: string; }) => {
+const LineChart = (props: { id: number; mode: string }) => {
+  Chart.defaults.font.size = 13;
+  Chart.defaults.font.weight = "400";
+  Chart.defaults.borderColor = "rgba(220, 255, 255, 0.04)";
+  Chart.defaults.color = "#d4d4d8";
   Chart.register(...registerables);
 
   const modes: { [key: string]: any } = {
@@ -86,8 +90,11 @@ const LineChart = (props: { id: number; mode: string; }) => {
             data: processedData,
             backgroundColor: ["rgba(220, 255, 255, 0.4)"],
             borderColor: ["rgba(220, 255, 255, 0.7)"],
-            borderWidth: 1,
-            borderDash: [5, 10],
+            borderWidth: 1.5,
+            hoverBorderWidth: 2,
+            borderDash: [5, 15],
+            borderJoinStyle: "round",
+            borderCapStyle: "round",
           },
         ],
       }}
@@ -109,7 +116,7 @@ const LineChart = (props: { id: number; mode: string; }) => {
             hoverRadius: 15,
           },
           line: {
-            tension: 0.3,
+            tension: 0.35,
           },
         },
         plugins: {
@@ -118,10 +125,27 @@ const LineChart = (props: { id: number; mode: string; }) => {
           },
         },
         scales: {
-        y: {
-            beginAtZero: true
-        }
-    },
+          y: {
+            grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
+            beginAtZero: true,
+            ticks: {
+              maxTicksLimit: 6,
+            },
+          },
+          x: {
+            title: {
+              display: true,
+              text: xAxisKey.charAt(0).toUpperCase() + (xAxisKey + "s").slice(1), //Capitalize
+              padding: 14,
+              font: {
+                size: 14,
+                weight: "600",
+              }
+            },
+            grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
+            offset: true,
+          },
+        },
       }}
     />
   );

@@ -51,7 +51,7 @@ const Charts = () => {
             key={Chart.id}
             className="my-4 bg-neutral-900 rounded-2xl shadow-md"
           >
-            <div className="grid grid-cols-[20%_1fr_20%] px-2.5 py-6 grid-rows-1 h-8 place-content-between sticky z-1 top-0 bg-neutral-900/[0.1] backdrop-blur-2xl hover:backdrop-filter-none hover:bg-neutral-900 rounded-t-2xl">
+            <div className="grid grid-cols-[20%_1fr_20%] px-3 py-6 grid-rows-1 h-4 sticky z-1 top-0 bg-neutral-900/[0.1] backdrop-blur-2xl hover:backdrop-filter-none hover:bg-neutral-900 rounded-t-2xl">
               <ModeListbox
                 selected={Chart.mode}
                 chartController={[charts, setCharts]}
@@ -65,10 +65,10 @@ const Charts = () => {
                 className="bg-white/[0.06] hover:bg-rose-400/[0.6] transition-all text-zinc-300 hover:text-zinc-900 p-1 rounded-lg justify-self-end self-center"
                 onClick={() => removeChart(Chart.id)}
               >
-                <XIcon className="w-5 h-5" />
+                <XIcon className="w-8 h-4" />
               </button>
             </div>
-            <div className="p-4">
+            <div className="px-4 pb-1 -mt-1 min-h-[200px] transition-all h-fit">
               {Chart.mode === "Events" && (
                 <LineChart id={Chart.id} mode={Chart.mode}/>
               )}
