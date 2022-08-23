@@ -1,7 +1,10 @@
-import EventChart from "./EventChart";
+import dynamic from "next/dynamic";
 import useLocalStorageState from "use-local-storage-state";
 import { XIcon, PlusIcon } from "@heroicons/react/solid";
 import ModeListbox from "./Listbox";
+
+const EventChart = dynamic(() => import("./EventChart"));
+const StatsChart = dynamic(() => import("./StatsChart"));
 
 /**
  * Chart visualizations panel
@@ -71,6 +74,9 @@ const Charts = () => {
             <div className="px-4 pb-1 -mt-1 min-h-[200px] transition-all h-fit">
               {Chart.mode === "Events" && (
                 <EventChart id={Chart.id} mode={Chart.mode}/>
+              )}
+              {Chart.mode === "Stats" && (
+                <StatsChart id={Chart.id} mode={Chart.mode}/>
               )}
             </div>
           </div>
