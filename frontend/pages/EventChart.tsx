@@ -5,7 +5,7 @@ import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
 import { useEffect } from "react";
 
-const LineChart = (props: { id: number; mode: string }) => {
+const EventChart = (props: { id: number; mode: string }) => {
   Chart.defaults.font.size = 13;
   Chart.defaults.font.weight = "400";
   Chart.defaults.borderColor = "rgba(220, 255, 255, 0.04)";
@@ -151,4 +151,4 @@ const LineChart = (props: { id: number; mode: string }) => {
   );
 };
 
-export default LineChart;
+export default EventChart;

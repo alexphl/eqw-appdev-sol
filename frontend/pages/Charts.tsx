@@ -1,4 +1,4 @@
-import LineChart from "./LineChart";
+import EventChart from "./EventChart";
 import useLocalStorageState from "use-local-storage-state";
 import { XIcon, PlusIcon } from "@heroicons/react/solid";
 import ModeListbox from "./Listbox";
@@ -70,7 +70,7 @@ const Charts = () => {
             </div>
             <div className="px-4 pb-1 -mt-1 min-h-[200px] transition-all h-fit">
               {Chart.mode === "Events" && (
-                <LineChart id={Chart.id} mode={Chart.mode}/>
+                <EventChart id={Chart.id} mode={Chart.mode}/>
               )}
             </div>
           </div>
