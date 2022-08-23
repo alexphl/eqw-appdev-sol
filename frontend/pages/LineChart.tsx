@@ -5,7 +5,7 @@ import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
 import { useEffect } from "react";
 
-const LineChart = (props: { id: number; mode: string }) => {
+const LineChart = (props: { id: number; mode: string; }) => {
   Chart.register(...registerables);
 
   const modes: { [key: string]: any } = {

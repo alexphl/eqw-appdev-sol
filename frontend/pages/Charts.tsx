@@ -21,6 +21,13 @@ const Charts = () => {
     setCount(count + 1);
   }
 
+  function clearChartStorage(id:number) {
+    localStorage.removeItem("ChartURL:" + id);
+    localStorage.removeItem("ChartSelectedDate" + id);
+    localStorage.removeItem("ChartXAxisKey" + id);
+    localStorage.removeItem("ChartData" + id);
+  }
+
   const removeChart = (id: number) => {
     const index = charts.findIndex((chart) => chart.id === id);
 
@@ -29,10 +36,7 @@ const Charts = () => {
       console.log("removed chart at " + index);
     }
 
-    localStorage.removeItem("ChartURL:" + id);
-    localStorage.removeItem("ChartSelectedDate" + id);
-    localStorage.removeItem("ChartXAxisKey" + id);
-    localStorage.removeItem("ChartData" + id);
+    clearChartStorage(id);
 
     if (charts.length == 1) {
       setCount(0);
@@ -52,6 +56,7 @@ const Charts = () => {
                 selected={Chart.mode}
                 chartController={[charts, setCharts]}
                 id={Chart.id}
+                cleanupFunc={clearChartStorage}
               />
               <div className="font-medium text-center self-center text-sm">
                 Chart {Chart.id}
@@ -65,7 +70,7 @@ const Charts = () => {
             </div>
             <div className="p-4">
               {Chart.mode === "Events" && (
-                <LineChart id={Chart.id} mode={Chart.mode} />
+                <LineChart id={Chart.id} mode={Chart.mode}/>
               )}
             </div>
           </div>

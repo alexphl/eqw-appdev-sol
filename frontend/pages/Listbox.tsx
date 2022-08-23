@@ -2,7 +2,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
 
-const ModeListbox = (props: { selected: any; chartController: any; id:number}) => {
+const ModeListbox = (props: { selected: any; chartController: any; id:number; cleanupFunc:Function }) => {
   const modes = ["Events", "Stats"];
   const [selected, setSelected] = useState(props.selected);
   const [charts, setCharts] = props.chartController;
@@ -17,10 +17,14 @@ const ModeListbox = (props: { selected: any; chartController: any; id:number}) =
       setCharts(newArr);
     }
 
+    // Clear chart local storage
+    props.cleanupFunc(id);
+
     return mode;
   };
 
   useEffect(() => {
+    if (selected === props.selected) return;
     setChartMode(props.id, selected);
   }, [selected]);
 
