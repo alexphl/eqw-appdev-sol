@@ -17,7 +17,7 @@ const prefs: { [key: string]: any } = {
 /**
  * Chart for plotting events
  **/
-const EventChart = (props: { id: number }) => {
+const EventsChart = (props: { id: number }) => {
   Chart.register(...registerables);
 
   const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {
@@ -143,4 +143,4 @@ const EventChart = (props: { id: number }) => {
   );
 };
 
-export default EventChart;
+export default EventsChart;

@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { Chart } from "chart.js";
 
 // Lazy load our chart types
-const EventChart = dynamic(() => import("./ChartType_Events"));
+const EventsChart = dynamic(() => import("./ChartType_Events"));
 const StatsChart = dynamic(() => import("./ChartType_Stats"));
 
 // Set global chart styles
@@ -89,10 +89,10 @@ const Charts = () => {
                 }
               >
                 {Chart.mode === "Events" && (
-                  <EventChart id={Chart.id} />
+                  <EventsChart id={Chart.id} />
                 )}
                 {Chart.mode === "Stats" && (
-                  <StatsChart id={Chart.id} mode={Chart.mode} />
+                  <StatsChart id={Chart.id} />
                 )}
               </Suspense>
             </div>
