@@ -45,7 +45,7 @@ const EventsChart = (props: { id: number }) => {
       const trimIndex = newData[0].date.indexOf("T");
       if (trimIndex != -1) {
         for (var i = 0; i < data.length; i++) {
-          newData[i].date = newData[i].date.substring(0, trimIndex);
+          newData[i].date = newData[i].date.substring(5, trimIndex);
         }
       }
 
@@ -142,6 +142,9 @@ const EventsChart = (props: { id: number }) => {
               },
               grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
               offset: true,
+              ticks: {
+                maxTicksLimit: 12,
+              },
             },
           },
         }}
