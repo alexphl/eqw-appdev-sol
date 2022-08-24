@@ -73,7 +73,7 @@ app.get(
     SELECT date, hour, events
     FROM public.hourly_events
     ORDER BY date, hour
-    LIMIT 168;
+    LIMIT 480;
   `;
     return next();
   },
@@ -89,7 +89,7 @@ app.get(
     FROM public.hourly_events
     GROUP BY date
     ORDER BY date
-    LIMIT 7;
+    LIMIT 12;
   `;
     return next();
   },
@@ -104,7 +104,7 @@ app.get(
     SELECT date, hour, impressions, clicks, revenue
     FROM public.hourly_stats
     ORDER BY date, hour
-    LIMIT 168;
+    LIMIT 288;
   `;
     return next();
   },
