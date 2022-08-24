@@ -134,16 +134,16 @@ const EventsChart = (props: { id: number }) => {
                 display: true,
                 text:
                   xAxisKey.charAt(0).toUpperCase() + (xAxisKey + "s").slice(1), //Capitalize
-                padding: 14,
+                padding: 11,
                 font: {
-                  size: 14,
+                  size: 13.5,
                   weight: "600",
                 },
               },
               grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
               offset: true,
               ticks: {
-                maxTicksLimit: 12,
+                maxTicksLimit: 14,
               },
             },
           },
@@ -153,11 +153,11 @@ const EventsChart = (props: { id: number }) => {
         {url === prefs.urls.daily && (
           <button
             disabled
-            className="-ml-16 absoulute transition-all p-0.5"
+            className="-ml-16 absoulute transition-all p-2"
           ></button>
         )}
         {url === prefs.urls.hourly && (
-          <button className="-ml-16 absoulute bg-white/[0.06] transition-all text-white p-0.5 rounded-full" onClick={() => setSelectedDate(null)}>
+          <button className="-ml-16 absoulute bg-white/[0.06] transition-all text-white p-1 rounded-full" onClick={() => setSelectedDate(null)}>
             <ArrowLeftIcon className="w-8 h-4" />
           </button>
         )}
