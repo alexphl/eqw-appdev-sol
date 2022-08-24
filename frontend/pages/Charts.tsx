@@ -63,7 +63,7 @@ const Charts = () => {
         return (
           <div
             key={Chart.id}
-            className="my-4 bg-neutral-900 rounded-2xl shadow-md min-h-[30vw] xl:min-h-[24vw] 2xl:min-h-[10vw]"
+            className="my-4 bg-neutral-900 rounded-2xl shadow-md min-h-[35vw] xl:min-h-[30vw] 2xl:min-h-[400px]"
           >
             <div className="grid grid-cols-[20%_1fr_20%] px-3 py-6 grid-rows-1 h-4 sticky z-1 top-0 bg-neutral-900/[0.1] backdrop-blur-2xl hover:backdrop-filter-none hover:bg-neutral-900 rounded-t-2xl">
               <ChartModeListbox
