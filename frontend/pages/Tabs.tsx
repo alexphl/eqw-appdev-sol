@@ -4,7 +4,10 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Tabs = (props: { selector: any; components: string[] }) => {
+/**
+ * Tab navigation panel
+ **/
+const Tabs = (props: { selector: [number, any]; components: string[] }) => {
   const categories = props.components;
   const [selectedIndex, setSelectedIndex] = props.selector;
 

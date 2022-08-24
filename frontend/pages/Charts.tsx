@@ -1,11 +1,19 @@
 import dynamic from "next/dynamic";
 import useLocalStorageState from "use-local-storage-state";
 import { XIcon, PlusIcon } from "@heroicons/react/solid";
-import ModeListbox from "./Listbox";
+import ChartModeListbox from "./ChartModeListbox";
 import { Suspense } from "react";
+import { Chart } from "chart.js";
 
-const EventChart = dynamic(() => import("./EventChart"));
-const StatsChart = dynamic(() => import("./StatsChart"));
+// Lazy load our chart types
+const EventChart = dynamic(() => import("./ChartType_Events"));
+const StatsChart = dynamic(() => import("./ChartType_Stats"));
+
+// Set global chart styles
+Chart.defaults.font.size = 13;
+Chart.defaults.font.weight = "400";
+Chart.defaults.borderColor = "rgba(220, 255, 255, 0.04)";
+Chart.defaults.color = "#d4d4d8";
 
 /**
  * Chart visualizations panel
@@ -25,6 +33,7 @@ const Charts = () => {
     setCount(count + 1);
   }
 
+  // Flushes local storage chart state cache
   function clearChartStorage(id: number) {
     localStorage.removeItem("ChartURL:" + id);
     localStorage.removeItem("ChartSelectedDate" + id);
@@ -32,17 +41,18 @@ const Charts = () => {
     localStorage.removeItem("ChartData" + id);
   }
 
+  // Removes a chart from charts array
   const removeChart = (id: number) => {
-    const index = charts.findIndex((chart) => chart.id === id);
+    const index = charts.findIndex((chart: {id:number}) => chart.id === id);
 
     if (index > -1) {
       setCharts(charts.filter((_item, i) => i !== index));
-      console.log("removed chart at " + index);
     }
 
     clearChartStorage(id);
 
-    if (charts.length == 1) {
+    // Reset chart counter when array is empty
+    if (charts.length === 1) {
       setCount(0);
     }
   };
@@ -56,7 +66,7 @@ const Charts = () => {
             className="my-4 bg-neutral-900 rounded-2xl shadow-md min-h-[30vw] xl:min-h-[24vw] 2xl:min-h-[10vw]"
           >
             <div className="grid grid-cols-[20%_1fr_20%] px-3 py-6 grid-rows-1 h-4 sticky z-1 top-0 bg-neutral-900/[0.1] backdrop-blur-2xl hover:backdrop-filter-none hover:bg-neutral-900 rounded-t-2xl">
-              <ModeListbox
+              <ChartModeListbox
                 selected={Chart.mode}
                 chartController={[charts, setCharts]}
                 id={Chart.id}
@@ -79,7 +89,7 @@ const Charts = () => {
                 }
               >
                 {Chart.mode === "Events" && (
-                  <EventChart id={Chart.id} mode={Chart.mode} />
+                  <EventChart id={Chart.id} />
                 )}
                 {Chart.mode === "Stats" && (
                   <StatsChart id={Chart.id} mode={Chart.mode} />

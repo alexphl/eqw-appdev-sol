@@ -2,14 +2,17 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
 
-const ModeListbox = (props: { selected: any; chartController: any; id:number; cleanupFunc:Function }) => {
+/**
+ * Chart mode selection listbox
+ **/
+const ChartModeListbox = (props: { selected: string; chartController: [any, any]; id:number; cleanupFunc:Function }) => {
   const modes = ["Events", "Stats"];
   const [selected, setSelected] = useState(props.selected);
   const [charts, setCharts] = props.chartController;
 
   const setChartMode = (id: number, mode: string) => {
-    const index = charts.findIndex((chart:any) => chart.id === id);
-    console.log("Setting chart " + id + " mode to " + mode);
+    const index = charts.findIndex((chart: {id:number}) => chart.id === id);
+    console.log("Setting Chart " + id + " mode to " + mode);
 
     if (index > -1) {
       let newArr = [...charts];
@@ -23,6 +26,7 @@ const ModeListbox = (props: { selected: any; chartController: any; id:number; cl
     return mode;
   };
 
+  // Checks if chart mode has to be updated
   useEffect(() => {
     if (selected === props.selected) return;
     setChartMode(props.id, selected);
@@ -50,7 +54,7 @@ const ModeListbox = (props: { selected: any; chartController: any; id:number; cl
             leaveTo="transform scale-95 opacity-0"
           >
             <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-max overflow-auto rounded-lg backdrop-blur-2xl bg-zinc-300/[0.05] py-1 text-sm shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-              {modes.map((mode: any) => (
+              {modes.map((mode: string) => (
                 <Listbox.Option
                   key={mode}
                   className={({ active }) =>
@@ -86,4 +90,4 @@ const ModeListbox = (props: { selected: any; chartController: any; id:number; cl
   );
 };
 
-export default ModeListbox;
+export default ChartModeListbox;

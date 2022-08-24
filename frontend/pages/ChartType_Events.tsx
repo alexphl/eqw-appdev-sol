@@ -5,32 +5,23 @@ import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
 import { useEffect } from "react";
 
-const EventChart = (props: { id: number; mode: string }) => {
-  Chart.defaults.font.size = 13;
-  Chart.defaults.font.weight = "400";
-  Chart.defaults.borderColor = "rgba(220, 255, 255, 0.04)";
-  Chart.defaults.color = "#d4d4d8";
+// Chart constants
+const prefs: { [key: string]: any } = {
+  urls: {
+    daily: "http://localhost:5555/events/daily",
+    hourly: "http://localhost:5555/events/hourly",
+  },
+  axis: { x: "date", y: "events" },
+};
+
+/**
+ * Chart for plotting events
+ **/
+const EventChart = (props: { id: number }) => {
   Chart.register(...registerables);
 
-  const modes: { [key: string]: any } = {
-    Events: {
-      urls: {
-        daily: "http://localhost:5555/events/daily",
-        hourly: "http://localhost:5555/events/hourly",
-      },
-      axis: { x: "date", y: "events" },
-    },
-    Stats: {
-      urls: {
-        daily: "http://localhost:5555/stats/daily",
-        hourly: "http://localhost:5555/stats/hourly",
-      },
-      axis: { x: "date", y: "events" },
-    },
-  };
-
   const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {
-    defaultValue: modes[props.mode].urls.daily,
+    defaultValue: prefs.urls.daily,
   });
   const { data } = useSWR(url, fetcher);
   const [processedData, setProcessedData]: [any, any, any] =
@@ -41,7 +32,7 @@ const EventChart = (props: { id: number; mode: string }) => {
   );
   const [xAxisKey, setXAxisKey] = useLocalStorageState(
     "ChartXAxisKey" + props.id,
-    { defaultValue: modes[props.mode].axis.x }
+    { defaultValue: prefs.axis.x }
   );
 
   // Process data updates
@@ -51,16 +42,16 @@ const EventChart = (props: { id: number; mode: string }) => {
 
       // Use sane date formatting
       const trimIndex = newData[0].date.indexOf("T");
-      if (props.mode === "Events" && trimIndex != -1) {
+      if (trimIndex != -1) {
         for (var i = 0; i < data.length; i++) {
           newData[i].date = newData[i].date.substring(0, trimIndex);
         }
       }
 
       // If in hour view, filter by selected date
-      if (url === modes[props.mode].urls.hourly) {
-        newData = newData.filter(function (obj: { date: any }) {
-          return obj.date === selectedDate;
+      if (url === prefs.urls.hourly) {
+        newData = newData.filter(function (json: { date: string }) {
+          return json.date === selectedDate;
         });
 
         // We also need hour value to be a string for Chart.js to work
@@ -74,8 +65,8 @@ const EventChart = (props: { id: number; mode: string }) => {
   }, [data]);
 
   useEffect(() => {
-    if (selectedDate && url === modes[props.mode].urls.daily) {
-      setUrl(modes[props.mode].urls.hourly);
+    if (selectedDate && url === prefs.urls.daily) {
+      setUrl(prefs.urls.hourly);
       setXAxisKey("hour");
     }
   }, [selectedDate]);
@@ -107,7 +98,7 @@ const EventChart = (props: { id: number; mode: string }) => {
         animations: {},
         parsing: {
           xAxisKey: xAxisKey,
-          yAxisKey: modes[props.mode].axis.y,
+          yAxisKey: prefs.axis.y,
         },
         elements: {
           point: {
@@ -135,12 +126,13 @@ const EventChart = (props: { id: number; mode: string }) => {
           x: {
             title: {
               display: true,
-              text: xAxisKey.charAt(0).toUpperCase() + (xAxisKey + "s").slice(1), //Capitalize
+              text:
+                xAxisKey.charAt(0).toUpperCase() + (xAxisKey + "s").slice(1), //Capitalize
               padding: 14,
               font: {
                 size: 14,
                 weight: "600",
-              }
+              },
             },
             grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
             offset: true,
