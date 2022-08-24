@@ -82,7 +82,7 @@ const Charts = () => {
                 <XIcon className="w-8 h-4" />
               </button>
             </div>
-            <div className="px-4 pb-1 -mt-1">
+            <div className="px-4 pb-3 -mt-1">
               <Suspense
                 fallback={
                   <div className="m-auto w-full"> Loading... </div>

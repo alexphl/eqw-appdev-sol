@@ -4,6 +4,7 @@ import useSWR from "swr";
 import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
 import { useEffect } from "react";
+import { ArrowLeftIcon } from "@heroicons/react/solid";
 
 // Chart constants
 const prefs: { [key: string]: any } = {
@@ -68,78 +69,97 @@ const EventsChart = (props: { id: number }) => {
     if (selectedDate && url === prefs.urls.daily) {
       setUrl(prefs.urls.hourly);
       setXAxisKey("hour");
+    } else if (!selectedDate && url === prefs.urls.hourly) {
+      setUrl(prefs.urls.daily);
+      setXAxisKey("date");
+      console.log("here");
     }
   }, [selectedDate]);
 
   return (
-    <Line
-      data={{
-        labels: [],
-        datasets: [
-          {
-            label: "Events",
-            data: processedData,
-            backgroundColor: ["rgba(220, 255, 255, 0.4)"],
-            borderColor: ["rgba(220, 255, 255, 0.7)"],
-            borderWidth: 1.5,
-            hoverBorderWidth: 2,
-            borderDash: [5, 15],
-            borderJoinStyle: "round",
-            borderCapStyle: "round",
+    <>
+      <Line
+        data={{
+          labels: [],
+          datasets: [
+            {
+              label: "Events",
+              data: processedData,
+              backgroundColor: ["rgba(220, 255, 255, 0.4)"],
+              borderColor: ["rgba(220, 255, 255, 0.7)"],
+              borderWidth: 1.5,
+              hoverBorderWidth: 2,
+              borderDash: [5, 15],
+              borderJoinStyle: "round",
+              borderCapStyle: "round",
+            },
+          ],
+        }}
+        options={{
+          onClick: function (_evt, element) {
+            if (element.length > 0 && processedData) {
+              setSelectedDate(processedData[element[0].index].date);
+            }
           },
-        ],
-      }}
-      options={{
-        onClick: function (_evt, element) {
-          if (element.length > 0 && processedData) {
-            setSelectedDate(processedData[element[0].index].date);
-          }
-        },
-        animations: {},
-        parsing: {
-          xAxisKey: xAxisKey,
-          yAxisKey: prefs.axis.y,
-        },
-        elements: {
-          point: {
-            radius: 10,
-            hitRadius: 60,
-            hoverRadius: 15,
+          animations: {},
+          parsing: {
+            xAxisKey: xAxisKey,
+            yAxisKey: prefs.axis.y,
           },
-          line: {
-            tension: 0.35,
-          },
-        },
-        plugins: {
-          legend: {
-            display: false,
-          },
-        },
-        scales: {
-          y: {
-            grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
-            beginAtZero: true,
-            ticks: {
-              maxTicksLimit: 6,
+          elements: {
+            point: {
+              radius: 10,
+              hitRadius: 60,
+              hoverRadius: 15,
+            },
+            line: {
+              tension: 0.35,
             },
           },
-          x: {
-            title: {
-              display: true,
-              text:
-                xAxisKey.charAt(0).toUpperCase() + (xAxisKey + "s").slice(1), //Capitalize
-              padding: 14,
-              font: {
-                size: 14,
-                weight: "600",
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+          scales: {
+            y: {
+              grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
+              beginAtZero: true,
+              ticks: {
+                maxTicksLimit: 6,
               },
             },
-            grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
-            offset: true,
+            x: {
+              title: {
+                display: true,
+                text:
+                  xAxisKey.charAt(0).toUpperCase() + (xAxisKey + "s").slice(1), //Capitalize
+                padding: 14,
+                font: {
+                  size: 14,
+                  weight: "600",
+                },
+              },
+              grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
+              offset: true,
+            },
           },
-        },
-      }}
-    />
+        }}
+      />
+      <div className="w-min m-auto relative -mt-8">
+        {url === prefs.urls.daily && (
+          <button
+            disabled
+            className="-ml-16 absoulute transition-all p-0.5"
+          ></button>
+        )}
+        {url === prefs.urls.hourly && (
+          <button className="-ml-16 absoulute bg-white/[0.06] transition-all text-white p-0.5 rounded-full" onClick={() => setSelectedDate(null)}>
+            <ArrowLeftIcon className="w-8 h-4" />
+          </button>
+        )}
+      </div>
+    </>
   );
 };
 
