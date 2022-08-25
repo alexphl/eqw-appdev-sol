@@ -63,9 +63,9 @@ const Charts = () => {
         return (
           <div
             key={Chart.id}
-            className="my-4 bg-neutral-900 rounded-2xl shadow-md min-h-[32vw] xl:min-h-[25vw] 2xl:min-h-[400px]"
+            className="my-4 bg-neutral-900 sm:rounded-2xl shadow-md"
           >
-            <div className="grid grid-cols-[20%_1fr_20%] px-3 py-6 grid-rows-1 h-4 sticky z-1 top-0 bg-neutral-900/[0.1] backdrop-blur-2xl hover:backdrop-filter-none hover:bg-neutral-900 rounded-t-2xl">
+            <div className="grid grid-cols-[20%_1fr_20%] px-3 py-6 grid-rows-1 h-4 sticky z-1 top-0 bg-neutral-900/[0.1] backdrop-blur-2xl hover:backdrop-filter-none hover:bg-neutral-900 sm:rounded-t-2xl">
               <ChartModeListbox
                 selected={Chart.mode}
                 chartController={[charts, setCharts]}
@@ -82,7 +82,7 @@ const Charts = () => {
                 <XIcon className="w-8 h-4" />
               </button>
             </div>
-            <div className="px-4 pb-3 -mt-1">
+            <div className="px-2 sm:px-4 pb-1.5 -mt-1 h-[300px] sm:h-[380px] max-h-[85vh]">
               <Suspense
                 fallback={
                   <div className="m-auto w-full"> Loading... </div>

@@ -9,8 +9,8 @@ import { ArrowLeftIcon } from "@heroicons/react/solid";
 // Chart constants
 const prefs: { [key: string]: any } = {
   urls: {
-    daily: "http://localhost:5555/events/daily",
-    hourly: "http://localhost:5555/events/hourly",
+    daily: "http://192.168.0.15:5555/events/daily",
+    hourly: "http://192.168.0.15:5555/events/hourly",
   },
   axis: { x: "date", y: "events" },
 };
@@ -37,7 +37,7 @@ const EventsChart = (props: { id: number }) => {
   );
 
   // Process data updates
-  useEffect(() => {
+  useEffect(() => { 
     if (data) {
       var newData = data;
 
@@ -72,7 +72,6 @@ const EventsChart = (props: { id: number }) => {
     } else if (!selectedDate && url === prefs.urls.hourly) {
       setUrl(prefs.urls.daily);
       setXAxisKey("date");
-      console.log("here");
     }
   }, [selectedDate]);
 
@@ -101,6 +100,7 @@ const EventsChart = (props: { id: number }) => {
               setSelectedDate(processedData[element[0].index].date);
             }
           },
+          maintainAspectRatio: false,
           animations: {},
           parsing: {
             xAxisKey: xAxisKey,
@@ -133,7 +133,7 @@ const EventsChart = (props: { id: number }) => {
               title: {
                 display: true,
                 text:
-                  xAxisKey.charAt(0).toUpperCase() + (xAxisKey + "s").slice(1), //Capitalize
+                  selectedDate && xAxisKey.charAt(0).toUpperCase() + (xAxisKey + "s").slice(1) + " for " + selectedDate || xAxisKey.charAt(0).toUpperCase() + (xAxisKey + "s").slice(1),
                 padding: 11,
                 font: {
                   size: 13.5,
@@ -157,7 +157,7 @@ const EventsChart = (props: { id: number }) => {
           ></button>
         )}
         {url === prefs.urls.hourly && (
-          <button className="-ml-16 absoulute bg-white/[0.06] transition-all text-white p-1 rounded-full" onClick={() => setSelectedDate(null)}>
+          <button className="-ml-24 absoulute bg-white/[0.06] transition-all text-white p-1 rounded-full" onClick={() => setSelectedDate(null)}>
             <ArrowLeftIcon className="w-8 h-4" />
           </button>
         )}

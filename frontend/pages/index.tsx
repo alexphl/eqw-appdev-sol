@@ -13,7 +13,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="px-12 py-6 transform-gpu" id="app">
+      <div className="sm:px-6 py-6 transform-gpu transition-all" id="app">
         <nav className="mb-6 flex content-center justify-center space-x-6">
           <Tabs
             components={components}
