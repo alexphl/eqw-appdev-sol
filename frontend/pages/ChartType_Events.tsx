@@ -3,7 +3,7 @@ import { Chart, registerables } from "chart.js";
 import useSWR from "swr";
 import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 
 // Chart constants
@@ -18,7 +18,7 @@ const prefs: { [key: string]: any } = {
 /**
  * Chart for plotting events
  **/
-const EventsChart = (props: { id: number, yAxisScale: [number, any] }) => {
+const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
   Chart.register(...registerables);
   const [yMax, setYMax] = props.yAxisScale;
 
@@ -61,14 +61,15 @@ const EventsChart = (props: { id: number, yAxisScale: [number, any] }) => {
 
         // Make sure every hour has event values to have consistent scale
         for (let i = 0; i < 24; i++) {
-          hours.push({date: selectedDate, hour: i.toString(), events: -1});
+          hours.push({ date: selectedDate, hour: i.toString(), events: -10 });
         }
 
         // Import fetch data values into our data
         for (let i = 0; i < newData.length; i++) {
           hours[newData[i].hour].events = newData[i].events;
-
-          if (hours[newData[i].hour].events > yMax) setYMax(hours[newData[i].hour].events);
+          // Update Y scale maximum for all Events charts
+          if (hours[newData[i].hour].events > yMax)
+            setYMax(hours[newData[i].hour].events);
         }
 
         newData = hours;
@@ -78,6 +79,7 @@ const EventsChart = (props: { id: number, yAxisScale: [number, any] }) => {
     }
   }, [data]);
 
+  // Handle date click
   useEffect(() => {
     if (selectedDate && url === prefs.urls.daily) {
       setUrl(prefs.urls.hourly);
@@ -100,7 +102,6 @@ const EventsChart = (props: { id: number, yAxisScale: [number, any] }) => {
               backgroundColor: ["rgba(220, 255, 255, 0.4)"],
               borderColor: ["rgba(220, 255, 255, 0.7)"],
               borderWidth: 1.5,
-              hoverBorderWidth: 2,
               borderDash: [5, 15],
               borderJoinStyle: "round",
               borderCapStyle: "round",
@@ -113,6 +114,10 @@ const EventsChart = (props: { id: number, yAxisScale: [number, any] }) => {
               setSelectedDate(processedData[element[0].index].date);
             }
           },
+          onHover: (event, chartElement) => {
+            const target = event.native ? event.native.target : event.target;
+            target.style.cursor = chartElement[0] && url === prefs.urls.daily ? "pointer" : "default";
+          },
           maintainAspectRatio: false,
           animations: {},
           parsing: {
@@ -123,7 +128,7 @@ const EventsChart = (props: { id: number, yAxisScale: [number, any] }) => {
             point: {
               radius: 10,
               hitRadius: 60,
-              hoverRadius: 15,
+              hoverRadius: url === prefs.urls.hourly ? 10 : 15,
             },
             line: {
               tension: 0.35,
