@@ -3,14 +3,14 @@ import { Chart, registerables } from "chart.js";
 import useSWR from "swr";
 import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 
 // Chart constants
 const prefs: { [key: string]: any } = {
   urls: {
-    daily: "http://192.168.0.15:5555/events/daily",
-    hourly: "http://192.168.0.15:5555/events/hourly",
+    daily: "http://localhost:5555/events/daily",
+    hourly: "http://localhost:5555/events/hourly",
   },
   axis: { x: "date", y: "events" },
 };
@@ -37,7 +37,7 @@ const EventsChart = (props: { id: number }) => {
   );
 
   // Process data updates
-  useEffect(() => { 
+  useEffect(() => {
     if (data) {
       var newData = data;
 
@@ -55,10 +55,20 @@ const EventsChart = (props: { id: number }) => {
           return json.date === selectedDate;
         });
 
-        // We also need hour value to be a string for Chart.js to work
-        for (var i = 0; i < newData.length; i++) {
-          newData[i].hour = newData[i].hour.toString();
+        // Generate hourly data
+        let hours = [];
+
+        // Make sure every hour has event values to have consistent scale
+        for (let i = 0; i < 24; i++) {
+          hours.push({date: selectedDate, hour: i.toString(), events: -1});
         }
+
+        // Import fetch data values into our data
+        for (let i = 0; i < newData.length; i++) {
+          hours[newData[i].hour].events = newData[i].events;
+        }
+
+        newData = hours;
       }
 
       setProcessedData(newData);
@@ -128,12 +138,18 @@ const EventsChart = (props: { id: number }) => {
               ticks: {
                 maxTicksLimit: 6,
               },
+              min: 0,
             },
             x: {
               title: {
                 display: true,
                 text:
-                  selectedDate && xAxisKey.charAt(0).toUpperCase() + (xAxisKey + "s").slice(1) + " for " + selectedDate || xAxisKey.charAt(0).toUpperCase() + (xAxisKey + "s").slice(1),
+                  (selectedDate &&
+                    xAxisKey.charAt(0).toUpperCase() +
+                      (xAxisKey + "s").slice(1) +
+                      " for " +
+                      selectedDate) ||
+                  xAxisKey.charAt(0).toUpperCase() + (xAxisKey + "s").slice(1),
                 padding: 11,
                 font: {
                   size: 13.5,
@@ -157,7 +173,10 @@ const EventsChart = (props: { id: number }) => {
           ></button>
         )}
         {url === prefs.urls.hourly && (
-          <button className="-ml-24 absoulute bg-white/[0.06] transition-all text-white p-1 rounded-full" onClick={() => setSelectedDate(null)}>
+          <button
+            className="-ml-24 absoulute bg-white/[0.06] transition-all text-white p-1 rounded-full"
+            onClick={() => setSelectedDate(null)}
+          >
             <ArrowLeftIcon className="w-8 h-4" />
           </button>
         )}
