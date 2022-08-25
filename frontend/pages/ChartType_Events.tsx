@@ -18,8 +18,9 @@ const prefs: { [key: string]: any } = {
 /**
  * Chart for plotting events
  **/
-const EventsChart = (props: { id: number }) => {
+const EventsChart = (props: { id: number, yAxisScale: [number, any] }) => {
   Chart.register(...registerables);
+  const [yMax, setYMax] = props.yAxisScale;
 
   const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {
     defaultValue: prefs.urls.daily,
@@ -66,6 +67,8 @@ const EventsChart = (props: { id: number }) => {
         // Import fetch data values into our data
         for (let i = 0; i < newData.length; i++) {
           hours[newData[i].hour].events = newData[i].events;
+
+          if (hours[newData[i].hour].events > yMax) setYMax(hours[newData[i].hour].events);
         }
 
         newData = hours;
@@ -139,6 +142,7 @@ const EventsChart = (props: { id: number }) => {
                 maxTicksLimit: 6,
               },
               min: 0,
+              suggestedMax: yMax,
             },
             x: {
               title: {

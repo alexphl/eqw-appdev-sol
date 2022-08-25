@@ -28,6 +28,10 @@ const Charts = () => {
     defaultValue: [{ id: count, mode: "Events" }],
   });
 
+  const [eventsYMax, setEventsYmax] = useLocalStorageState("eventsYMax", {
+    defaultValue: 0,
+  });
+
   function addChart() {
     setCharts((charts) => [...charts, { id: count + 1, mode: "Events" }]);
     setCount(count + 1);
@@ -54,6 +58,7 @@ const Charts = () => {
     // Reset chart counter when array is empty
     if (charts.length === 1) {
       setCount(0);
+      setEventsYmax(0);
     }
   };
 
@@ -88,7 +93,7 @@ const Charts = () => {
                   <div className="m-auto w-min"> Loading... </div>
                 }
               >
-                {Chart.mode === "Events" ? <EventsChart id={Chart.id} /> : <StatsChart id={Chart.id} />}
+                {Chart.mode === "Events" ? <EventsChart id={Chart.id} yAxisScale={[eventsYMax, setEventsYmax]} /> : <StatsChart id={Chart.id} />}
               </Suspense>
             </div>
           </div>
