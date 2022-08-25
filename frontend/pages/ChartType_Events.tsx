@@ -5,6 +5,7 @@ import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
 import { useEffect } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
+import ChartDeferred from "chartjs-plugin-deferred";
 
 // Chart constants
 const prefs: { [key: string]: any } = {
@@ -108,6 +109,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
             },
           ],
         }}
+        plugins={[ChartDeferred]}
         options={{
           onClick: function (_evt, element) {
             if (element.length > 0 && processedData) {
