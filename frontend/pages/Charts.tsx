@@ -73,7 +73,7 @@ const Charts = () => {
                 cleanupFunc={clearChartStorage}
               />
               <div className="font-medium text-center self-center text-sm">
-                Chart {Chart.id}
+                {Chart.id === 69 ? "Another chart. Thrilling." : "Chart " + Chart.id}
               </div>
               <button
                 className="bg-white/[0.06] hover:bg-rose-400/[0.6] transition-all text-zinc-300 hover:text-zinc-900 p-1 rounded-lg justify-self-end self-center"
@@ -82,18 +82,13 @@ const Charts = () => {
                 <XIcon className="w-8 h-4" />
               </button>
             </div>
-            <div className="px-2 sm:px-4 pb-1.5 -mt-1 h-[300px] sm:h-[380px] max-h-[85vh]">
+            <div className="px-3 sm:px-4 pb-1.5 -mt-1 h-[300px] sm:h-[380px] max-h-[85vh]">
               <Suspense
                 fallback={
-                  <div className="m-auto w-full"> Loading... </div>
+                  <div className="m-auto w-min"> Loading... </div>
                 }
               >
-                {Chart.mode === "Events" && (
-                  <EventsChart id={Chart.id} />
-                )}
-                {Chart.mode === "Stats" && (
-                  <StatsChart id={Chart.id} />
-                )}
+                {Chart.mode === "Events" ? <EventsChart id={Chart.id} /> : <StatsChart id={Chart.id} />}
               </Suspense>
             </div>
           </div>
