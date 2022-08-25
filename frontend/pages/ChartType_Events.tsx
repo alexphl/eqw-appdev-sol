@@ -115,8 +115,12 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
             }
           },
           onHover: (event, chartElement) => {
+            // @ts-ignore
             const target = event.native ? event.native.target : event.target;
-            target.style.cursor = chartElement[0] && url === prefs.urls.daily ? "pointer" : "default";
+            target.style.cursor =
+              chartElement[0] && url === prefs.urls.daily
+                ? "pointer"
+                : "default";
           },
           maintainAspectRatio: false,
           animations: {},

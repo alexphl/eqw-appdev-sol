@@ -15,6 +15,14 @@ Chart.defaults.font.weight = "400";
 Chart.defaults.borderColor = "rgba(220, 255, 255, 0.04)";
 Chart.defaults.color = "#d4d4d8";
 
+// Flushes local storage chart state cache
+function clearChartStorage(id: number) {
+  localStorage.removeItem("ChartURL:" + id);
+  localStorage.removeItem("ChartSelectedDate" + id);
+  localStorage.removeItem("ChartXAxisKey" + id);
+  localStorage.removeItem("ChartData" + id);
+}
+
 /**
  * Chart visualizations panel
  **/
@@ -31,23 +39,19 @@ const Charts = () => {
   const [eventsYMax, setEventsYmax] = useLocalStorageState("eventsYMax", {
     defaultValue: 0,
   });
+  const [statsYMax, setStatsYmax] = useLocalStorageState("statsYMax", {
+    defaultValue: 0,
+  });
 
+  // Add a new chart settings object to charts array
   function addChart() {
     setCharts((charts) => [...charts, { id: count + 1, mode: "Events" }]);
     setCount(count + 1);
   }
 
-  // Flushes local storage chart state cache
-  function clearChartStorage(id: number) {
-    localStorage.removeItem("ChartURL:" + id);
-    localStorage.removeItem("ChartSelectedDate" + id);
-    localStorage.removeItem("ChartXAxisKey" + id);
-    localStorage.removeItem("ChartData" + id);
-  }
-
-  // Removes a chart from charts array
+  // Removes the chart's settings object from charts array
   const removeChart = (id: number) => {
-    const index = charts.findIndex((chart: {id:number}) => chart.id === id);
+    const index = charts.findIndex((chart: { id: number }) => chart.id === id);
 
     if (index > -1) {
       setCharts(charts.filter((_item, i) => i !== index));
@@ -59,6 +63,7 @@ const Charts = () => {
     if (charts.length === 1) {
       setCount(0);
       setEventsYmax(0);
+      setStatsYmax(0);
     }
   };
 
@@ -78,7 +83,9 @@ const Charts = () => {
                 cleanupFunc={clearChartStorage}
               />
               <div className="font-medium text-center self-center text-sm">
-                {Chart.id === 69 ? "Another chart. Thrilling." : "Chart " + Chart.id}
+                {Chart.id === 69
+                  ? "Another chart. Thrilling."
+                  : "Chart " + Chart.id}
               </div>
               <button
                 className="bg-white/[0.06] hover:bg-rose-400/[0.6] transition-all text-zinc-300 hover:text-zinc-900 p-1 rounded-lg justify-self-end self-center"
@@ -89,11 +96,19 @@ const Charts = () => {
             </div>
             <div className="px-3 sm:px-4 pb-1.5 -mt-1 h-[300px] sm:h-[380px] max-h-[85vh]">
               <Suspense
-                fallback={
-                  <div className="m-auto w-min"> Loading... </div>
-                }
+                fallback={<div className="m-auto w-min"> Loading... </div>}
               >
-                {Chart.mode === "Events" ? <EventsChart id={Chart.id} yAxisScale={[eventsYMax, setEventsYmax]} /> : <StatsChart id={Chart.id} />}
+                {Chart.mode === "Events" ? (
+                  <EventsChart
+                    id={Chart.id}
+                    yAxisScale={[eventsYMax, setEventsYmax]}
+                  />
+                ) : (
+                  <StatsChart
+                    id={Chart.id}
+                    yAxisScale={[statsYMax, setStatsYmax]}
+                  />
+                )}
               </Suspense>
             </div>
           </div>
