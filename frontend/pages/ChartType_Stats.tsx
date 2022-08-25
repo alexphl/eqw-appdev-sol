@@ -61,7 +61,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
         // Make sure every hour has event values to have consistent scale
         for (let i = 0; i < 24; i++) {
-          hours.push({ date: selectedDate, hour: i.toString(), events: -10 });
+          hours.push({ date: selectedDate, hour: `${i.toString()}:00`, events: -10 });
         }
 
         // Import fetch data values into our data
