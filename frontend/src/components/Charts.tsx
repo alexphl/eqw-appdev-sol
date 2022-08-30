@@ -69,7 +69,7 @@ const Charts = () => {
 
   return (
     <div className="max-w-3xl m-auto">
-      {charts.map((Chart, _index) => {
+      {charts.map((Chart) => {
         return (
           <div
             key={Chart.id}

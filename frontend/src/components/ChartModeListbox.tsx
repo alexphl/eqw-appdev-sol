@@ -24,7 +24,7 @@ const ChartModeListbox = (props: {
       console.log("Setting Chart " + id + " mode to " + mode);
 
       if (index > -1) {
-        let newArr = [...charts];
+        const newArr = [...charts];
         newArr[index]["mode"] = mode;
         setCharts(newArr);
       }

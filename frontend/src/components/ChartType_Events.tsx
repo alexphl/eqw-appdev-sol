@@ -39,12 +39,12 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
   // Process data updates
   useEffect(() => {
     if (data) {
-      var newData = data;
+      let newData = data;
 
       // Use sane date formatting
       const trimIndex = newData[0].date.indexOf("T");
       if (trimIndex != -1) {
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           newData[i].date = newData[i].date.substring(5, trimIndex);
         }
       }
@@ -56,7 +56,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
         });
 
         // Generate hourly data
-        let hours = [];
+        const hours = [];
 
         // Make sure every hour has event values to have consistent scale
         for (let i = 0; i < 24; i++) {
