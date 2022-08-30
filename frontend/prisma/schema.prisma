@@ -1,15 +1,39 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Example {
-    id String @id @default(cuid())
+model hourly_events {
+  date   DateTime @db.Date
+  hour   Int
+  events Int?
+  poi_id Int?
+
+  @@id([date, hour])
+  @@index([date, hour, poi_id], map: "hourly_events_date_hour_poi_id_index")
+}
+
+model hourly_stats {
+  date        DateTime @db.Date
+  hour        Int
+  impressions Int      @default(0)
+  clicks      Int      @default(0)
+  revenue     Decimal  @default(0.0) @db.Decimal(19, 13)
+  poi_id      Int?
+
+  @@id([date, hour])
+  @@index([date, hour, poi_id], map: "hourly_stats_date_hour_poi_id_index")
+}
+
+model poi {
+  poi_id Int    @id @default(autoincrement())
+  name   String
+  lat    Float
+  lon    Float
+
+  @@index([poi_id], map: "poi_poi_id_index")
 }
