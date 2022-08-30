@@ -19,6 +19,7 @@
     "@trpc/server": "^9.27.2",
     "chart.js": "^3.9.1",
     "chartjs-plugin-deferred": "^2.0.0",
+    "lru-cache": "^7.14.0",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-chartjs-2": "^4.3.1",
