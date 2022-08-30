@@ -16,7 +16,6 @@ const ChartModeListbox = (props: {
 
   // Checks if chart mode has to be updated
   useEffect(() => {
-
     const [charts, setCharts] = props.chartController;
     const setChartMode = (id: number, mode: string) => {
       const index = charts.findIndex(

@@ -3,7 +3,7 @@ import useLocalStorageState from "use-local-storage-state";
 import { XIcon, PlusIcon } from "@heroicons/react/solid";
 import ChartModeListbox from "./ChartModeListbox";
 import { Suspense } from "react";
-import { Chart } from "chart.js";
+import { Chart, registerables } from "chart.js";
 
 // Lazy load our chart types
 const EventsChart = dynamic(() => import("./ChartType_Events"));
@@ -27,7 +27,7 @@ function clearChartStorage(id: number) {
  * Chart visualizations panel
  **/
 const Charts = () => {
-  //localStorage.removeItem("charts");
+  Chart.register(...registerables);
 
   const [count, setCount] = useLocalStorageState("chartCount", {
     defaultValue: 1,

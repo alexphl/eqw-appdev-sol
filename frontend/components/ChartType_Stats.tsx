@@ -1,5 +1,4 @@
 import { Line } from "react-chartjs-2";
-import { Chart, registerables } from "chart.js";
 import useSWR from "swr";
 import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
@@ -20,7 +19,6 @@ const prefs: { [key: string]: any } = {
  * Chart for plotting events
  **/
 const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
-  Chart.register(...registerables);
   const [yMax, setYMax] = props.yAxisScale;
 
   const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {
