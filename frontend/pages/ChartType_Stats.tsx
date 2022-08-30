@@ -77,19 +77,19 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
       }
 
       setProcessedData(newData);
-    }
-  }, [data]);
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, setProcessedData, setYMax, url]);
 
   // Handle date click
   useEffect(() => {
-    if (selectedDate && url === prefs.urls.daily) {
+    if (selectedDate) {
       setUrl(prefs.urls.hourly);
       setXAxisKey("hour");
-    } else if (!selectedDate && url === prefs.urls.hourly) {
+    } else {
       setUrl(prefs.urls.daily);
       setXAxisKey("date");
     }
-  }, [selectedDate]);
+  }, [selectedDate, setUrl, setXAxisKey]);
 
   return (
     <>
