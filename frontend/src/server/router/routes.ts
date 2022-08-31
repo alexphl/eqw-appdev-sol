@@ -23,12 +23,12 @@ const isRateLimited = (
 };
 
 export const hourlyEventsRouter = createRouter()
-  .middleware(async ({ ctx, next }) => {
-    if (isRateLimited(ctx.reqOrigin))
-      throw new TRPCError({ code: "UNAUTHORIZED" });
-    return next();
-  })
-  .query("/events/hourly", {
+  // .middleware(async ({ ctx, next }) => {
+  //   if (isRateLimited(ctx.reqOrigin))
+  //     throw new TRPCError({ code: "UNAUTHORIZED" });
+  //   return next();
+  // })
+  .query("getHourlyEvents", {
     async resolve({ ctx }) {
       try {
         return await ctx.prisma.hourly_events.findMany({
@@ -39,7 +39,6 @@ export const hourlyEventsRouter = createRouter()
           },
           orderBy: {
             date: "desc",
-            hour: "desc",
           },
           take: 480,
         });
@@ -49,21 +48,21 @@ export const hourlyEventsRouter = createRouter()
     },
   });
 
-export const dailyEventsRouter = createRouter().query("/events/daily", {
-  async resolve({ ctx }) {
-    try {
-      return await ctx.prisma.hourly_events.groupBy({
-        by: ["date"],
-        _sum: {
-          events: true,
-        },
-        orderBy: {
-          date: "desc",
-        },
-        take: 12,
-      });
-    } catch (error) {
-      console.log("error", error);
-    }
-  },
-});
+// export const dailyEventsRouter = createRouter().query("getDailyEvents", {
+//   async resolve({ ctx }) {
+//     try {
+//       return await ctx.prisma.hourly_events.groupBy({
+//         by: ["date"],
+//         _sum: {
+//           events: true,
+//         },
+//         orderBy: {
+//           date: "desc",
+//         },
+//         take: 12,
+//       });
+//     } catch (error) {
+//       console.log("error", error);
+//     }
+//   },
+// });

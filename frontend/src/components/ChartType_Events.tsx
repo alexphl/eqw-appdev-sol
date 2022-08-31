@@ -24,7 +24,9 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
   const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {
     defaultValue: prefs.urls.daily,
   });
+
   const { data } = useSWR(url, fetcher);
+
   const [processedData, setProcessedData]: [any, any, any] =
     useLocalStorageState("ChartData" + props.id, data);
   const [selectedDate, setSelectedDate] = useLocalStorageState(
@@ -60,7 +62,11 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
         // Make sure every hour has event values to have consistent scale
         for (let i = 0; i < 24; i++) {
-          hours.push({ date: selectedDate, hour: `${i.toString()}:00`, events: -10 });
+          hours.push({
+            date: selectedDate,
+            hour: `${i.toString()}:00`,
+            events: -10,
+          });
         }
 
         // Import fetch data values into our data
