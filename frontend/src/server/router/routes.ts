@@ -12,7 +12,7 @@ const isRateLimited = (
   remoteAddress: string | null,
   limitPerInterval?: number
 ) => {
-  const limit = limitPerInterval || 15; // Limit per interval, default:10
+  const limit = limitPerInterval || 25; // Limit per interval, default:10
   const token = remoteAddress; // Use remote address for client tracking
 
   const tokenCount: [number] = tokenCache.get(token) || [0];
@@ -22,12 +22,32 @@ const isRateLimited = (
   return tokenCount[0] > limit;
 };
 
-export const hourlyEventsRouter = createRouter()
-  // .middleware(async ({ ctx, next }) => {
-  //   if (isRateLimited(ctx.reqOrigin))
-  //     throw new TRPCError({ code: "UNAUTHORIZED" });
-  //   return next();
-  // })
+export const eventsRouter = createRouter()
+  .middleware(async ({ ctx, next }) => {
+    if (isRateLimited(ctx.reqOrigin))
+      throw new TRPCError({ code: "BAD_REQUEST" });
+    return next();
+  })
+  .query("getDailyEvents", {
+    async resolve({ ctx }) {
+      try {
+        return await ctx.prisma.hourly_events.groupBy({
+          by: ["date"],
+          _sum: {
+            events: true,
+          },
+          orderBy: [
+            {
+              date: "asc",
+            },
+          ],
+          take: 12,
+        });
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+  })
   .query("getHourlyEvents", {
     async resolve({ ctx }) {
       try {
@@ -38,7 +58,7 @@ export const hourlyEventsRouter = createRouter()
             events: true,
           },
           orderBy: {
-            date: "desc",
+            date: "asc",
           },
           take: 480,
         });
@@ -48,21 +68,28 @@ export const hourlyEventsRouter = createRouter()
     },
   });
 
-// export const dailyEventsRouter = createRouter().query("getDailyEvents", {
-//   async resolve({ ctx }) {
-//     try {
-//       return await ctx.prisma.hourly_events.groupBy({
-//         by: ["date"],
-//         _sum: {
-//           events: true,
-//         },
-//         orderBy: {
-//           date: "desc",
-//         },
-//         take: 12,
-//       });
-//     } catch (error) {
-//       console.log("error", error);
-//     }
-//   },
-// });
+// export const hourlyEventsRouter = createRouter()
+//   .middleware(async ({ ctx, next }) => {
+//     if (isRateLimited(ctx.reqOrigin))
+//       throw new TRPCError({ code: "BAD_REQUEST" });
+//     return next();
+//   })
+//   .query("getHourlyEvents", {
+//     async resolve({ ctx }) {
+//       try {
+//         return await ctx.prisma.hourly_events.findMany({
+//           select: {
+//             date: true,
+//             hour: true,
+//             events: true,
+//           },
+//           orderBy: {
+//             date: "desc",
+//           },
+//           take: 480,
+//         });
+//       } catch (error) {
+//         console.log("error", error);
+//       }
+//     },
+//   });

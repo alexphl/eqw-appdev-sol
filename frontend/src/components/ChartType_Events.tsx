@@ -1,18 +1,17 @@
 import { Line } from "react-chartjs-2";
-import useSWR from "swr";
-import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
 import { useEffect } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import ChartDeferred from "chartjs-plugin-deferred";
+import { trpc } from "../utils/trpc";
 
 // Chart constants
 const prefs: { [key: string]: any } = {
   urls: {
-    daily: "http://localhost:5555/events/daily",
-    hourly: "http://localhost:5555/events/hourly",
+    daily: "eventsRouter.getDailyEvents",
+    hourly: "eventsRouter.getHourlyEvents",
   },
-  axis: { x: "date", y: "events" },
+  axis: { x: "date", y: "_sum.events" },
 };
 
 /**
@@ -25,9 +24,11 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
     defaultValue: prefs.urls.daily,
   });
 
-  const { data } = useSWR(url, fetcher);
+  const { data, isSuccess } = trpc.useQuery([
+    url,
+  ]);
 
-  const [processedData, setProcessedData]: [any, any, any] =
+  const [processedData, setProcessedData]: [any, any, any] = //@ts-ignore
     useLocalStorageState("ChartData" + props.id, data);
   const [selectedDate, setSelectedDate] = useLocalStorageState(
     "ChartSelectedDate" + props.id,
@@ -40,19 +41,20 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
   // Process data updates
   useEffect(() => {
-    if (data) {
+    if (isSuccess) {
       let newData = data;
 
-      // Use sane date formatting
-      const trimIndex = newData[0].date.indexOf("T");
-      if (trimIndex != -1) {
-        for (let i = 0; i < data.length; i++) {
-          newData[i].date = newData[i].date.substring(5, trimIndex);
+      //Use sane date formatting
+      const trimIndex = newData![0]!.date.toString().indexOf(":");
+      if (trimIndex != -1) { 
+        for (let i = 0; i < data!.length; i++) {
+          //@ts-ignore
+          newData[i].date = newData[i].date.toString().substring(4, trimIndex-8);
         }
       }
 
       // If in hour view, filter by selected date
-      if (url === prefs.urls.hourly) {
+      if (url === prefs.urls.hourly) { //@ts-ignore
         newData = newData.filter(function (json: { date: string }) {
           return json.date === selectedDate;
         });
@@ -70,13 +72,14 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
         }
 
         // Import fetch data values into our data
-        for (let i = 0; i < newData.length; i++) {
+        for (let i = 0; i < newData.length; i++) { //@ts-ignore
           hours[newData[i].hour].events = newData[i].events;
-          // Update Y scale maximum for all Events charts
-          if (hours[newData[i].hour].events > yMax)
+          //@ts-ignore // Update Y scale maximum for all Events charts
+          if (hours[newData[i].hour].events > yMax) //@ts-ignore
             setYMax(hours[newData[i].hour].events);
         }
 
+        //@ts-ignore
         newData = hours;
       }
 
@@ -117,6 +120,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
         options={{
           onClick: function (_evt, element) {
             if (element.length > 0 && processedData) {
+              //@ts-ignore
               setSelectedDate(processedData[element[0].index].date);
             }
           },
@@ -132,7 +136,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
           animations: {},
           parsing: {
             xAxisKey: xAxisKey,
-            yAxisKey: prefs.axis.y,
+            yAxisKey: url === prefs.urls.daily ? "_sum.events" : "events",
           },
           elements: {
             point: {

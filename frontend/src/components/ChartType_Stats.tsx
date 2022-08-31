@@ -1,6 +1,5 @@
 import { Line } from "react-chartjs-2";
 import useSWR from "swr";
-import fetcher from "./fetcher";
 import useLocalStorageState from "use-local-storage-state";
 import { useEffect } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
@@ -24,7 +23,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
   const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {
     defaultValue: prefs.urls.daily,
   });
-  const { data } = useSWR(url, fetcher);
+  const { data } = useSWR(url);s
   const [processedData, setProcessedData]: [any, any, any] =
     useLocalStorageState("ChartData" + props.id, data);
   const [selectedDate, setSelectedDate] = useLocalStorageState(
@@ -42,12 +41,12 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
       let newData = data;
 
       // Use sane date formatting
-      const trimIndex = newData[0].date.indexOf("T");
-      if (trimIndex != -1) {
-        for (let i = 0; i < data.length; i++) {
-          newData[i].date = newData[i].date.substring(5, trimIndex);
-        }
-      }
+      // const trimIndex = newData[0].date.indexOf("T");
+      // if (trimIndex != -1) {
+      //   for (let i = 0; i < data.length; i++) {
+      //     newData[i].date = newData[i].date.substring(5, trimIndex);
+      //   }
+      // }
 
       // If in hour view, filter by selected date
       if (url === prefs.urls.hourly) {
