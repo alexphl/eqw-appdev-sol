@@ -1,7 +1,8 @@
 # EQWorks data visualization exercise
-My work for the EQWorks Application Development Track assignment.
+My work for the EQWorks Application Development Track assignment. [See demo](https://eqw-appdev-sol.vercel.app)
 
-Built with Next.js, tRPC and Prisma
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-t3-app`](https://create.t3.gg).
+Includes React, tRPC and Prisma.
 
 What has been done:
 - Migrated EQWorks API from Express to tRPC using Prisma.
