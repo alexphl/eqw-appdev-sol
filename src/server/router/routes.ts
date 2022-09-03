@@ -12,22 +12,18 @@ const isRateLimited = (
   remoteAddress: string | null,
   limitPerInterval?: number
 ) => {
-  const limit = limitPerInterval || 25; // Limit per interval, default:10
+  const limit = limitPerInterval || 250; // Limit per interval, default:10
   const token = remoteAddress; // Use remote address for client tracking
 
   const tokenCount: [number] = tokenCache.get(token) || [0];
   if (tokenCount[0] === 0) tokenCache.set(token, tokenCount);
   tokenCount[0] += 1;
 
+  console.log("HERE");
   return tokenCount[0] > limit;
 };
 
 const dailyEventsRouter = createRouter()
-  .middleware(async ({ ctx, next }) => {
-    if (isRateLimited(ctx.reqOrigin))
-      throw new TRPCError({ code: "BAD_REQUEST" });
-    return next();
-  })
   .query("getDailyEvents", {
     async resolve({ ctx }) {
       try {
@@ -50,11 +46,6 @@ const dailyEventsRouter = createRouter()
   });
 
  const hourlyEventsRouter = createRouter()
-  .middleware(async ({ ctx, next }) => {
-    if (isRateLimited(ctx.reqOrigin))
-      throw new TRPCError({ code: "BAD_REQUEST" });
-    return next();
-  })
   .query("getHourlyEvents", {
     async resolve({ ctx }) {
       try {
@@ -76,11 +67,6 @@ const dailyEventsRouter = createRouter()
   });
 
 const dailyStatsRouter = createRouter()
-  .middleware(async ({ ctx, next }) => {
-    if (isRateLimited(ctx.reqOrigin))
-      throw new TRPCError({ code: "BAD_REQUEST" });
-    return next();
-  })
   .query("getDailyStats", {
     async resolve({ ctx }) {
       try {
@@ -105,11 +91,6 @@ const dailyStatsRouter = createRouter()
   });
 
 const hourlyStatsRouter = createRouter()
-  .middleware(async ({ ctx, next }) => {
-    if (isRateLimited(ctx.reqOrigin))
-      throw new TRPCError({ code: "BAD_REQUEST" });
-    return next();
-  })
   .query("getHourlyStats", {
     async resolve({ ctx }) {
       try {
@@ -150,9 +131,19 @@ const hourlyStatsRouter = createRouter()
   });
 
   export const eventsRouter = createRouter()
+  .middleware(async ({ ctx, next }) => {
+    if (isRateLimited(ctx.reqOrigin))
+      throw new TRPCError({ code: "BAD_REQUEST" });
+    return next();
+  })
   .merge("daily.", dailyEventsRouter)
-  .merge("hourly", hourlyEventsRouter);
+  .merge("hourly.", hourlyEventsRouter);
 
   export const statsRouter = createRouter()
+  .middleware(async ({ ctx, next }) => {
+    if (isRateLimited(ctx.reqOrigin))
+      throw new TRPCError({ code: "BAD_REQUEST" });
+    return next();
+  })
   .merge("daily.", dailyStatsRouter)
-  .merge("hourly", hourlyStatsRouter);
+  .merge("hourly.", hourlyStatsRouter);
