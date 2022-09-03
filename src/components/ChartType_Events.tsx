@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import ChartDeferred from "chartjs-plugin-deferred";
 import { trpc } from "../utils/trpc";
+import React from "react";
 
 // Chart constants
 const prefs: { [key: string]: any } = {
@@ -208,4 +209,4 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
   );
 };
 
-export default EventsChart;
+export default React.memo(EventsChart);
