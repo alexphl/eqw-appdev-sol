@@ -208,4 +208,4 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
   );
 };
 
-export default React.memo(EventsChart);
+export default EventsChart;
