@@ -22,7 +22,7 @@ const isRateLimited = (
   return tokenCount[0] > limit;
 };
 
-export const eventsRouter = createRouter()
+const dailyEventsRouter = createRouter()
   .middleware(async ({ ctx, next }) => {
     if (isRateLimited(ctx.reqOrigin))
       throw new TRPCError({ code: "BAD_REQUEST" });
@@ -47,6 +47,13 @@ export const eventsRouter = createRouter()
         console.log("error", error);
       }
     },
+  });
+
+ const hourlyEventsRouter = createRouter()
+  .middleware(async ({ ctx, next }) => {
+    if (isRateLimited(ctx.reqOrigin))
+      throw new TRPCError({ code: "BAD_REQUEST" });
+    return next();
   })
   .query("getHourlyEvents", {
     async resolve({ ctx }) {
@@ -68,7 +75,7 @@ export const eventsRouter = createRouter()
     },
   });
 
-export const statsRouter = createRouter()
+const dailyStatsRouter = createRouter()
   .middleware(async ({ ctx, next }) => {
     if (isRateLimited(ctx.reqOrigin))
       throw new TRPCError({ code: "BAD_REQUEST" });
@@ -95,6 +102,13 @@ export const statsRouter = createRouter()
         console.log("error", error);
       }
     },
+  });
+
+const hourlyStatsRouter = createRouter()
+  .middleware(async ({ ctx, next }) => {
+    if (isRateLimited(ctx.reqOrigin))
+      throw new TRPCError({ code: "BAD_REQUEST" });
+    return next();
   })
   .query("getHourlyStats", {
     async resolve({ ctx }) {
@@ -134,3 +148,11 @@ export const statsRouter = createRouter()
       }
     },
   });
+
+  export const eventsRouter = createRouter()
+  .merge("daily.", dailyEventsRouter)
+  .merge("hourly", hourlyEventsRouter);
+
+  export const statsRouter = createRouter()
+  .merge("daily.", dailyStatsRouter)
+  .merge("hourly", hourlyStatsRouter);
