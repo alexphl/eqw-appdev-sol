@@ -68,28 +68,69 @@ export const eventsRouter = createRouter()
     },
   });
 
-// export const hourlyEventsRouter = createRouter()
-//   .middleware(async ({ ctx, next }) => {
-//     if (isRateLimited(ctx.reqOrigin))
-//       throw new TRPCError({ code: "BAD_REQUEST" });
-//     return next();
-//   })
-//   .query("getHourlyEvents", {
-//     async resolve({ ctx }) {
-//       try {
-//         return await ctx.prisma.hourly_events.findMany({
-//           select: {
-//             date: true,
-//             hour: true,
-//             events: true,
-//           },
-//           orderBy: {
-//             date: "desc",
-//           },
-//           take: 480,
-//         });
-//       } catch (error) {
-//         console.log("error", error);
-//       }
-//     },
-//   });
+export const statsRouter = createRouter()
+  .middleware(async ({ ctx, next }) => {
+    if (isRateLimited(ctx.reqOrigin))
+      throw new TRPCError({ code: "BAD_REQUEST" });
+    return next();
+  })
+  .query("getDailyStats", {
+    async resolve({ ctx }) {
+      try {
+        return await ctx.prisma.hourly_stats.groupBy({
+          by: ["date"],
+          _sum: {
+            impressions: true,
+            clicks: true,
+            revenue: true,
+          },
+          orderBy: [
+            {
+              date: "asc",
+            },
+          ],
+          take: 12,
+        });
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+  })
+  .query("getHourlyStats", {
+    async resolve({ ctx }) {
+      try {
+        return await ctx.prisma.hourly_stats.findMany({
+          select: {
+            date: true,
+            hour: true,
+            impressions: true,
+            clicks: true,
+            revenue: true,
+          },
+          orderBy: {
+            date: "asc",
+            hour: 'asc',
+          },
+          take: 480,
+        });
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+  });
+
+  export const poiRouter = createRouter()
+  .middleware(async ({ ctx, next }) => {
+    if (isRateLimited(ctx.reqOrigin))
+      throw new TRPCError({ code: "BAD_REQUEST" });
+    return next();
+  })
+  .query("getPoi", {
+    async resolve({ ctx }) {
+      try {
+        return await ctx.prisma.poi.findMany();
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+  });
