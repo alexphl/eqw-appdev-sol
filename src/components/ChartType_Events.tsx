@@ -4,14 +4,14 @@ import { useEffect } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import ChartDeferred from "chartjs-plugin-deferred";
 import { trpc } from "../utils/trpc";
+import React from "react";
 
 // Chart constants
 const prefs: { [key: string]: any } = {
   urls: {
-    daily: "eventsRouter.getDailyEvents",
-    hourly: "eventsRouter.getHourlyEvents",
+    daily: "eventsRouter.daily.getDailyEvents",
+    hourly: "eventsRouter.hourly.getHourlyEvents",
   },
-  axis: { x: "date", y: "_sum.events" },
 };
 
 /**
@@ -36,7 +36,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
   );
   const [xAxisKey, setXAxisKey] = useLocalStorageState(
     "ChartXAxisKey" + props.id,
-    { defaultValue: prefs.axis.x }
+    { defaultValue: "events" }
   );
 
   // Process data updates
@@ -208,4 +208,4 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
   );
 };
 
-export default EventsChart;
+export default React.memo(EventsChart);
