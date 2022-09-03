@@ -5,12 +5,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-t3-a
 Includes React, tRPC and Prisma.
 
 What has been done:
-- Migrated EQWorks API from Express to tRPC using Prisma.
-- Implemented custom middleware for rate limiting API routes using LRU cache.
-- Responsive UI with ability to add and remove charts for comparison.
-- Automatic saving of user workspaces in local storage.
-- Interactive data visualizations using line charts from Chart.js.
-- Dynamic chart axis for consistency when displaying multiple charts.
+- ⚡️ Migrated EQWorks API from Express to tRPC using Prisma.
+- 🧿 Wrote custom middleware for rate limiting API routes using LRU cache.
+- 📱 Built a responsive UI with ability to add and remove charts for comparison.
+- 💾 Set up automatic saving of user workspaces in local storage.
+- 📈 Created interactive data visualizations using line charts from Chart.js.
+- 📊 Implemented chart axes synchronization between multiple charts for ease of comparison.
+- 🏎 Implemented lazy loading and deferred rendering for all components
 
 # To run the app locally
 
