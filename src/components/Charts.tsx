@@ -4,7 +4,6 @@ import { XIcon, PlusIcon } from "@heroicons/react/solid";
 import ChartModeListbox from "./ChartModeListbox";
 import { Suspense } from "react";
 import { Chart, registerables } from "chart.js";
-import React from "react";
 
 // Lazy load our chart types
 const EventsChart = dynamic(() => import("./ChartType_Events"));
@@ -128,4 +127,4 @@ const Charts = () => {
   );
 };
 
-export default React.memo(Charts);
+export default Charts;

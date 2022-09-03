@@ -1,6 +1,5 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
-import React from "react";
 import { useEffect, useState } from "react";
 
 /**
@@ -95,4 +94,4 @@ const ChartModeListbox = (props: {
   );
 };
 
-export default React.memo(ChartModeListbox);
+export default ChartModeListbox;
