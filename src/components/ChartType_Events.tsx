@@ -25,9 +25,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
     defaultValue: prefs.urls.daily,
   });
 
-  const { data, isSuccess } = trpc.useQuery([
-    url,
-  ]);
+  const { data, isSuccess } = trpc.useQuery([url]);
 
   const [processedData, setProcessedData]: [any, any, any] = //@ts-ignore
     useLocalStorageState("ChartData" + props.id, data);
@@ -47,15 +45,18 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
       //Use sane date formatting
       const trimIndex = newData![0]!.date.toString().indexOf(":");
-      if (trimIndex != -1) { 
+      if (trimIndex != -1) {
         for (let i = 0; i < data!.length; i++) {
           //@ts-ignore
-          newData[i].date = newData[i].date.toString().substring(4, trimIndex-8);
+          newData[i].date = newData[i].date
+            .toString()
+            .substring(4, trimIndex - 8);
         }
       }
 
       // If in hour view, filter by selected date
-      if (url === prefs.urls.hourly) { //@ts-ignore
+      if (url === prefs.urls.hourly) {
+        //@ts-ignore
         newData = newData.filter(function (json: { date: string }) {
           return json.date === selectedDate;
         });
@@ -73,10 +74,12 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
         }
 
         // Import fetch data values into our data
-        for (let i = 0; i < newData.length; i++) { //@ts-ignore
+        for (let i = 0; i < newData.length; i++) {
+          //@ts-ignore
           hours[newData[i].hour].events = newData[i].events;
           //@ts-ignore // Update Y scale maximum for all Events charts
-          if (hours[newData[i].hour].events > yMax) //@ts-ignore
+          if (hours[newData[i].hour].events > yMax)
+            //@ts-ignore
             setYMax(hours[newData[i].hour].events);
         }
 
@@ -167,13 +170,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
             x: {
               title: {
                 display: true,
-                text:
-                  (selectedDate &&
-                    xAxisKey.charAt(0).toUpperCase() +
-                      (xAxisKey + "s").slice(1) +
-                      " for " +
-                      selectedDate) ||
-                  xAxisKey.charAt(0).toUpperCase() + (xAxisKey + "s").slice(1),
+                text: (selectedDate && "Hours for " + selectedDate) || "Daily data",
                 padding: 11,
                 font: {
                   size: 13.5,

@@ -183,7 +183,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
                   size: 13.5,
                   weight: "600",
                 },
-                text: (selectedDate && "Hours for " + selectedDate) || "Dates",
+                text: (selectedDate && "Hours for " + selectedDate) || "Daily data",
               },
               grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
               offset: true,
@@ -202,7 +202,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
         {url === prefs.urls.hourly && (
           <button
-            className="-ml-20 absoulute bg-white/[0.06] transition-all text-white p-1 rounded-full"
+            className="-ml-24 absoulute bg-white/[0.06] transition-all text-white p-1 rounded-full"
             onClick={() => {
               setSelectedDate(null);
               setUrl(prefs.urls.daily);

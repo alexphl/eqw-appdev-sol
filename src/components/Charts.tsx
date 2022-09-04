@@ -38,7 +38,7 @@ const Charts = () => {
     defaultValue: 1,
   });
   const [charts, setCharts] = useLocalStorageState("charts", {
-    defaultValue: [{ id: count, mode: "Events" }],
+    defaultValue: [{ id: count, mode: "Stats" }],
   });
 
   const [eventsYMax, setEventsYmax] = useLocalStorageState("eventsYMax", {
@@ -73,7 +73,7 @@ const Charts = () => {
   };
 
   return (
-    <div className="max-w-3xl m-auto">
+    <div className="container max-w-3xl xl:max-w-4xl m-auto">
       {charts.map((Chart) => {
         return (
           <div
