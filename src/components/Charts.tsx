@@ -22,6 +22,10 @@ function clearChartStorage(id: number) {
   localStorage.removeItem("ChartSelectedDate" + id);
   localStorage.removeItem("ChartXAxisKey" + id);
   localStorage.removeItem("ChartData" + id);
+  localStorage.removeItem("ChartRevenueData" + id);
+  localStorage.removeItem("ChartImpressionsData" + id);
+  localStorage.removeItem("ChartClicksData" + id);
+  localStorage.removeItem("ChartLabels" + id);
 }
 
 /**
