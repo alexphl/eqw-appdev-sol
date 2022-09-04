@@ -77,7 +77,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
       }
 
       console.log(newLabels);
-      
+
       setLabels(newLabels);
       setRevenueData(makeDataset("revenue"));
       setImpressionsData(makeDataset("impressions"));
@@ -158,7 +158,14 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
             y: {
               grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
               beginAtZero: true, //@ts-ignore false alarm for logarithmic scale
-              type: 'logarithmic',
+              type: "logarithmic",
+              ticks: {
+                callback: function (label: any, _index, _labels) { 
+                  if ((label / 1000000) >= 1) return label / 1000000 + "M";
+                  return label / 1000 + "k";
+                },
+                maxTicksLimit: 6,
+              },
             },
             x: {
               title: {
@@ -173,7 +180,6 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               offset: true,
             },
           },
-
         }}
       />
 
