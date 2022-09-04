@@ -33,10 +33,6 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
     "ChartSelectedDate" + props.id,
     { defaultValue: null }
   );
-  const [xAxisKey, setXAxisKey] = useLocalStorageState(
-    "ChartXAxisKey" + props.id,
-    { defaultValue: prefs.axis.x }
-  );
 
   // Process data updates
   useEffect(() => {
@@ -89,18 +85,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
       setProcessedData(newData);
     } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, setProcessedData, setYMax, url]);
-
-  // Handle date click
-  useEffect(() => {
-    if (selectedDate) {
-      setUrl(prefs.urls.hourly);
-      setXAxisKey("hour");
-    } else {
-      setUrl(prefs.urls.daily);
-      setXAxisKey("date");
-    }
-  }, [selectedDate, setUrl, setXAxisKey]);
+  }, [data, setProcessedData, setYMax]);
 
   return (
     <>
@@ -124,8 +109,8 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
         options={{
           onClick: function (_evt, element) {
             if (element.length > 0 && processedData) {
-              //@ts-ignore
-              setSelectedDate(processedData[element[0].index].date);
+              setUrl(prefs.urls.hourly); //@ts-ignore
+              setSelectedDate(data[element[0].index].date);
             }
           },
           onHover: (event, chartElement) => {
@@ -139,7 +124,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
           maintainAspectRatio: false,
           animations: {},
           parsing: {
-            xAxisKey: xAxisKey,
+            xAxisKey: url === prefs.urls.daily ? "date" : "hour",
             yAxisKey: url === prefs.urls.daily ? "_sum.events" : "events",
           },
           elements: {
@@ -170,7 +155,8 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
             x: {
               title: {
                 display: true,
-                text: (selectedDate && "Hours for " + selectedDate) || "Daily data",
+                text:
+                  (selectedDate && "Hours for " + selectedDate) || "Daily data",
                 padding: 11,
                 font: {
                   size: 13.5,
@@ -196,7 +182,10 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
         {url === prefs.urls.hourly && (
           <button
             className="-ml-24 absoulute bg-white/[0.06] transition-all text-white p-1 rounded-full"
-            onClick={() => setSelectedDate(null)}
+            onClick={() => {
+              setSelectedDate(null);
+              setUrl(prefs.urls.daily);
+            }}
           >
             <ArrowLeftIcon className="w-8 h-4" />
           </button>
