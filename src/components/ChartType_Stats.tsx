@@ -32,22 +32,28 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
   // Datasets
   const [revenueData, setRevenueData]: [any, any, any] = //@ts-ignore
-    useLocalStorageState("ChartRevenueData" + props.id, data);
+    useLocalStorageState("ChartRevenueData" + props.id, null);
 
   const [impressionsData, setImpressionsData]: [any, any, any] = //@ts-ignore
-    useLocalStorageState("ChartImpressionsData" + props.id, data);
+    useLocalStorageState("ChartImpressionsData" + props.id, null);
 
   const [clicksData, setClicksData]: [any, any, any] = //@ts-ignore
-    useLocalStorageState("ChartClicksData" + props.id, data);
+    useLocalStorageState("ChartClicksData" + props.id, null);
 
   const [labels, setLabels]: [any, any, any] = //@ts-ignore
-    useLocalStorageState("ChartLabels" + props.id, data);
+    useLocalStorageState("ChartLabels" + props.id, null);
 
   function makeDataset(target: string) {
     const newDataset = [];
 
-    for (let i = 0; i < data.length; i++) {
-      newDataset.push(data[i]._sum[target]);
+    if (url === prefs.urls.daily) {
+      for (let i = 0; i < data.length; i++) {
+        newDataset.push(data[i]._sum[target]);
+      }
+    } else {
+      for (let i = 0; i < data.length; i++) {
+        newDataset.push(data[i][target]);
+      }
     }
 
     return newDataset;
@@ -55,7 +61,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
   // Process data updates
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && data) {
       const newData = data;
 
       //Use sane date formatting
@@ -71,8 +77,15 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
       // Format X-axis labels for Chart.js
       const newLabels = [];
-      for (let i = 0; i < data.length; i++) {
-        newLabels.push(data[i].date.toString());
+
+      if (url != prefs.urls.daily) {
+        for (let i = 0; i < 24; i++) {
+          newLabels.push(i + ":00");
+        }
+      } else {
+        for (let i = 0; i < data.length; i++) {
+          newLabels.push(data[i].date.toString());
+        }
       }
 
       setLabels(newLabels);
@@ -80,18 +93,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
       setImpressionsData(makeDataset("impressions"));
       setClicksData(makeDataset("clicks"));
     } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, setYMax, url]);
-
-  // Handle date click
-  useEffect(() => {
-    if (selectedDate) {
-      setUrl(prefs.urls.hourly);
-      //setXAxisKey("hour");
-    } else {
-      setUrl(prefs.urls.daily);
-      //setXAxisKey("date");
-    }
-  }, [selectedDate, setUrl]);
+  }, [data]);
 
   return (
     <>
@@ -102,20 +104,20 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
             {
               label: "Revenue",
               data: revenueData,
-              backgroundColor: "rgba(255, 100, 80, 0.8)",
-              borderRadius: 3,
+              backgroundColor: "rgba(255, 120, 140, 0.8)",
+              borderRadius: 2,
             },
             {
               label: "Impressions",
               data: impressionsData,
-              backgroundColor: "rgba(100, 100, 255, 0.8)",
-              borderRadius: 3,
+              backgroundColor: "rgba(120, 150, 255, 0.8)",
+              borderRadius: 2,
             },
             {
               label: "Clicks",
               data: clicksData,
-              backgroundColor: "rgba(100, 255, 255, 0.8)",
-              borderRadius: 3,
+              backgroundColor: "rgba(100, 245, 255, 0.8)",
+              borderRadius: 2,
             },
           ],
         }}
@@ -123,7 +125,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
         options={{
           onClick: function (_evt, element) {
             if (element.length > 0 && data) {
-              //@ts-ignore
+              setUrl(prefs.urls.hourly); //@ts-ignore
               setSelectedDate(data[element[0].index].date);
             }
           },
@@ -135,6 +137,8 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
                 ? "pointer"
                 : "default";
           },
+          spanGaps: true,
+          normalized: true,
           maintainAspectRatio: false,
           elements: {
             point: {
@@ -146,6 +150,12 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
           plugins: {
             legend: {
               display: true,
+              labels: {
+                font: {
+                  size:11,
+                },
+                boxWidth: 30,
+              }
             },
           },
           scales: {
@@ -154,11 +164,15 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               beginAtZero: true, //@ts-ignore false alarm for logarithmic scale
               type: "logarithmic",
               ticks: {
-                callback: function (label: any, _index, _labels) { 
-                  if ((label / 1000000) >= 1) return label / 1000000 + "M";
-                  return label / 1000 + "k";
+                callback: function (label: any, _index, _labels) {
+                  if (label / 1000000 >= 1) return label / 1000000 + "M";
+                  if (label / 1000 >= 1) return label / 1000 + "k";
+                  return label;
                 },
                 maxTicksLimit: 6,
+                font: {
+                  size: 10.5,
+                },
               },
             },
             x: {
@@ -169,6 +183,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
                   size: 13.5,
                   weight: "600",
                 },
+                text: (selectedDate && "Hours for " + selectedDate) || "Dates",
               },
               grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
               offset: true,
@@ -187,8 +202,11 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
         {url === prefs.urls.hourly && (
           <button
-            className="-ml-24 absoulute bg-white/[0.06] transition-all text-white p-1 rounded-full"
-            onClick={() => setSelectedDate(null)}
+            className="-ml-20 absoulute bg-white/[0.06] transition-all text-white p-1 rounded-full"
+            onClick={() => {
+              setSelectedDate(null);
+              setUrl(prefs.urls.daily);
+            }}
           >
             <ArrowLeftIcon className="w-8 h-4" />
           </button>

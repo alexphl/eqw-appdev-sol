@@ -109,7 +109,6 @@ export const statsRouter = createRouter()
           },
           orderBy: {
             date: "asc",
-            hour: 'asc',
           },
           take: 480,
         });

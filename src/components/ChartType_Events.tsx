@@ -183,7 +183,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
               offset: true,
               ticks: {
-                maxTicksLimit: 14,
+                maxTicksLimit: 24,
               },
             },
           },
