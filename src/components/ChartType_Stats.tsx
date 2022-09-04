@@ -50,7 +50,6 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
       newDataset.push(data[i]._sum[target]);
     }
 
-    console.log(newDataset);
     return newDataset;
   }
 
@@ -75,8 +74,6 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
       for (let i = 0; i < data.length; i++) {
         newLabels.push(data[i].date.toString());
       }
-
-      console.log(newLabels);
 
       setLabels(newLabels);
       setRevenueData(makeDataset("revenue"));
@@ -106,21 +103,18 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               label: "Revenue",
               data: revenueData,
               backgroundColor: "rgba(255, 100, 80, 0.8)",
-              barThickness: 12,
               borderRadius: 3,
             },
             {
               label: "Impressions",
               data: impressionsData,
               backgroundColor: "rgba(100, 100, 255, 0.8)",
-              barThickness: 12,
               borderRadius: 3,
             },
             {
               label: "Clicks",
               data: clicksData,
               backgroundColor: "rgba(100, 255, 255, 0.8)",
-              barThickness: 12,
               borderRadius: 3,
             },
           ],
