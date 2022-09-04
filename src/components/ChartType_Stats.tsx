@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import ChartDeferred from "chartjs-plugin-deferred";
 import { trpc } from "../utils/trpc";
+import React from "react";
 
 // Chart constants
 const prefs: { [key: string]: any } = {
@@ -216,4 +217,4 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
   );
 };
 
-export default StatsChart;
+export default React.memo(StatsChart);
