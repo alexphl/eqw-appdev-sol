@@ -60,6 +60,19 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
     return newDataset;
   }
 
+  function handleLegendClick(e:any, legendItem:any, legend:any) {
+    const index = legendItem.datasetIndex;
+    const ci = legend.chart;
+    if (ci.isDatasetVisible(index)) {
+        setYMax(0);
+        ci.hide(index);
+        legendItem.hidden = true;
+    } else {
+        ci.show(index);
+        legendItem.hidden = false;
+    }
+}
+
   // Process data updates
   useEffect(() => {
     if (isSuccess && data) {
@@ -156,6 +169,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
           plugins: {
             legend: {
               display: true,
+              onClick: handleLegendClick,
               labels: {
                 font: {
                   size: 11,
