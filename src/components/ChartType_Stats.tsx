@@ -17,7 +17,7 @@ const prefs: { [key: string]: any } = {
 /**
  * Chart for plotting events
  **/
-const StatsChart = (props: { id: number; }) => {
+const StatsChart = (props: { id: number }) => {
   const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {
     defaultValue: prefs.urls.daily,
   });
@@ -42,7 +42,7 @@ const StatsChart = (props: { id: number; }) => {
   const [labels, setLabels]: [any, any, any] = //@ts-ignore
     useLocalStorageState("ChartLabels" + props.id, null);
 
-  function makeDataset(target: string, baseData:any) {
+  function makeDataset(target: string, baseData: any) {
     const newDataset = [];
 
     if (url === prefs.urls.daily) {
@@ -67,7 +67,6 @@ const StatsChart = (props: { id: number; }) => {
       const trimIndex = newData![0]!.date.toString().indexOf(":");
       if (trimIndex != -1) {
         for (let i = 0; i < data!.length; i++) {
-          //@ts-ignore
           newData[i].date = newData[i].date
             .toString()
             .substring(4, trimIndex - 8);
@@ -128,9 +127,9 @@ const StatsChart = (props: { id: number; }) => {
         plugins={[ChartDeferred]}
         options={{
           onClick: function (_evt, element) {
-            if (element.length > 0 && data) {
-              setUrl(prefs.urls.hourly); //@ts-ignore
-              const date = data[element[0].index].date.toString();
+            if (!selectedDate && element.length > 0 && data) {
+              setUrl(prefs.urls.hourly);
+              const date = data[element[0]!.index].date.toString();
               setSelectedDate(date.substring(4, date.indexOf(":") - 8));
             }
           },
@@ -145,27 +144,20 @@ const StatsChart = (props: { id: number; }) => {
           spanGaps: true,
           normalized: true,
           maintainAspectRatio: false,
-          elements: {
-            point: {
-              radius: 10,
-              hitRadius: 60,
-              hoverRadius: url === prefs.urls.hourly ? 10 : 15,
-            },
-          },
           plugins: {
             legend: {
               display: true,
               labels: {
                 font: {
-                  size:11,
+                  size: 11,
                 },
                 boxWidth: 30,
-              }
+              },
             },
           },
           scales: {
             y: {
-              grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
+              grid: { lineWidth: 2, borderWidth: 2 },
               beginAtZero: true, //@ts-ignore false alarm for logarithmic scale
               type: "logarithmic",
               ticks: {
@@ -188,9 +180,10 @@ const StatsChart = (props: { id: number; }) => {
                   size: 13.5,
                   weight: "600",
                 },
-                text: (selectedDate && "Hours for " + selectedDate) || "Daily data",
+                text:
+                  (selectedDate && "Hours for " + selectedDate) || "Daily data",
               },
-              grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
+              grid: { lineWidth: 2, borderWidth: 2 },
               offset: true,
             },
           },

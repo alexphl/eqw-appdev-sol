@@ -26,7 +26,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
   const { data, isSuccess } = trpc.useQuery([url]);
 
-  const [processedData, setProcessedData]: [any, any, any] = //@ts-ignore
+  const [processedData, setProcessedData]: [any, any, any] = 
     useLocalStorageState("ChartData" + props.id, data);
   const [selectedDate, setSelectedDate] = useLocalStorageState(
     "ChartSelectedDate" + props.id,
@@ -42,7 +42,6 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
       const trimIndex = newData![0]!.date.toString().indexOf(":");
       if (trimIndex != -1) {
         for (let i = 0; i < newData!.length; i++) {
-          //@ts-ignore
           newData[i].date = newData[i].date
             .toString()
             .substring(4, trimIndex - 8);
@@ -51,15 +50,12 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
       // If in hour view, filter by selected date
       if (url === prefs.urls.hourly) {
-        //@ts-ignore
         newData = newData.filter(function (json: { date: string }) {
           return json.date === selectedDate;
         });
 
-        // Generate hourly data
-        const hours = [];
-
         // Make sure every hour has event values to have consistent scale
+        const hours = [];
         for (let i = 0; i < 24; i++) {
           hours.push({
             date: selectedDate,
@@ -78,13 +74,12 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
             setYMax(hours[newData[i].hour].events);
         }
 
-        //@ts-ignore
         newData = hours;
       }
 
       setProcessedData(newData);
     } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, setProcessedData, setYMax]);
+  }, [data, setYMax]);
 
   return (
     <>
@@ -107,7 +102,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
         plugins={[ChartDeferred]}
         options={{
           onClick: function (_evt, element) {
-            if (element.length > 0 && processedData) {
+            if (!selectedDate && element.length > 0 && data) {
               setUrl(prefs.urls.hourly); //@ts-ignore
               const date = data[element[0].index].date.toString();
               setSelectedDate(date.substring(4, date.indexOf(":") - 8));
@@ -146,7 +141,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
           },
           scales: {
             y: {
-              grid: {lineWidth: 2, borderWidth: 2 },
+              grid: { lineWidth: 2, borderWidth: 2 },
               beginAtZero: true,
               ticks: {
                 maxTicksLimit: 6,
@@ -165,7 +160,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
                   weight: "600",
                 },
               },
-              grid: {lineWidth: 2, borderWidth: 2 },
+              grid: { lineWidth: 2, borderWidth: 2 },
               offset: true,
             },
           },
