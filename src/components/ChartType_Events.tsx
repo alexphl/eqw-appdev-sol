@@ -12,7 +12,6 @@ const prefs: { [key: string]: any } = {
     daily: "eventsRouter.getDailyEvents",
     hourly: "eventsRouter.getHourlyEvents",
   },
-  axis: { x: "date", y: "_sum.events" },
 };
 
 /**
@@ -144,7 +143,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
           },
           scales: {
             y: {
-              grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
+              grid: {lineWidth: 2, borderWidth: 2 },
               beginAtZero: true,
               ticks: {
                 maxTicksLimit: 6,
@@ -163,11 +162,8 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
                   weight: "600",
                 },
               },
-              grid: { drawTicks: true, lineWidth: 2, borderWidth: 2 },
+              grid: {lineWidth: 2, borderWidth: 2 },
               offset: true,
-              ticks: {
-                maxTicksLimit: 24,
-              },
             },
           },
         }}

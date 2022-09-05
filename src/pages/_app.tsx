@@ -19,6 +19,7 @@ const getBaseUrl = () => {
 };
 
 export default withTRPC<AppRouter>({
+  //eslint-disable-next-line
   config({ ctx }) {
     /**
      * If you want to use SSR, you need to use the server's full URL

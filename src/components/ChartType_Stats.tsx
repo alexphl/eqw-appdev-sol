@@ -17,9 +17,7 @@ const prefs: { [key: string]: any } = {
 /**
  * Chart for plotting events
  **/
-const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
-  const [yMax, setYMax] = props.yAxisScale;
-
+const StatsChart = (props: { id: number; }) => {
   const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {
     defaultValue: prefs.urls.daily,
   });
@@ -165,7 +163,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               beginAtZero: true, //@ts-ignore false alarm for logarithmic scale
               type: "logarithmic",
               ticks: {
-                callback: function (label: any, _index, _labels) {
+                callback: function (label: any) {
                   if (label / 1000000 >= 1) return label / 1000000 + "M";
                   if (label / 1000 >= 1) return label / 1000 + "k";
                   return label;

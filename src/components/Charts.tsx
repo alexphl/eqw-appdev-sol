@@ -44,9 +44,6 @@ const Charts = () => {
   const [eventsYMax, setEventsYmax] = useLocalStorageState("eventsYMax", {
     defaultValue: 0,
   });
-  const [statsYMax, setStatsYmax] = useLocalStorageState("statsYMax", {
-    defaultValue: 0,
-  });
 
   // Add a new chart settings object to charts array
   function addChart() {
@@ -68,7 +65,6 @@ const Charts = () => {
     if (charts.length === 1) {
       setCount(0);
       setEventsYmax(0);
-      setStatsYmax(0);
     }
   };
 
@@ -111,7 +107,6 @@ const Charts = () => {
                 ) : (
                   <StatsChart
                     id={Chart.id}
-                    yAxisScale={[statsYMax, setStatsYmax]}
                   />
                 )}
               </Suspense>
