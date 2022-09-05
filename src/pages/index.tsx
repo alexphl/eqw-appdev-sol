@@ -5,7 +5,7 @@ import Tabs from "../components/Tabs";
 
 const Home: NextPage = () => {
   // Lazy load feature tab contents
-  const components = ["Charts", "Tables", "Geo"];
+  const components = ["Charts", "Tables", "Maps"];
   const [selectedTab, setSelectedTab] = useLocalStorageState("currentTab", {
     defaultValue: 0,
   });
