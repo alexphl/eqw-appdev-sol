@@ -36,12 +36,12 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
   // Process data updates
   useEffect(() => {
     if (isSuccess) {
-      let newData = data;
+      let newData = structuredClone(data);
 
       //Use sane date formatting
       const trimIndex = newData![0]!.date.toString().indexOf(":");
       if (trimIndex != -1) {
-        for (let i = 0; i < data!.length; i++) {
+        for (let i = 0; i < newData!.length; i++) {
           //@ts-ignore
           newData[i].date = newData[i].date
             .toString()
@@ -64,7 +64,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
           hours.push({
             date: selectedDate,
             hour: `${i.toString()}:00`,
-            events: -10,
+            events: null,
           });
         }
 
@@ -109,7 +109,8 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
           onClick: function (_evt, element) {
             if (element.length > 0 && processedData) {
               setUrl(prefs.urls.hourly); //@ts-ignore
-              setSelectedDate(data[element[0].index].date);
+              const date = data[element[0].index].date.toString();
+              setSelectedDate(date.substring(4, date.indexOf(":") - 8));
             }
           },
           onHover: (event, chartElement) => {
@@ -120,6 +121,8 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
                 ? "pointer"
                 : "default";
           },
+          spanGaps: true,
+          normalized: true,
           maintainAspectRatio: false,
           animations: {},
           parsing: {

@@ -42,16 +42,16 @@ const StatsChart = (props: { id: number; }) => {
   const [labels, setLabels]: [any, any, any] = //@ts-ignore
     useLocalStorageState("ChartLabels" + props.id, null);
 
-  function makeDataset(target: string) {
+  function makeDataset(target: string, baseData:any) {
     const newDataset = [];
 
     if (url === prefs.urls.daily) {
-      for (let i = 0; i < data.length; i++) {
-        newDataset.push(data[i]._sum[target]);
+      for (let i = 0; i < baseData.length; i++) {
+        newDataset.push(baseData[i]._sum[target]);
       }
     } else {
-      for (let i = 0; i < data.length; i++) {
-        newDataset.push(data[i][target]);
+      for (let i = 0; i < baseData.length; i++) {
+        newDataset.push(baseData[i][target]);
       }
     }
 
@@ -61,7 +61,7 @@ const StatsChart = (props: { id: number; }) => {
   // Process data updates
   useEffect(() => {
     if (isSuccess && data) {
-      const newData = data;
+      let newData = structuredClone(data);
 
       //Use sane date formatting
       const trimIndex = newData![0]!.date.toString().indexOf(":");
@@ -77,20 +77,25 @@ const StatsChart = (props: { id: number; }) => {
       // Format X-axis labels for Chart.js
       const newLabels = [];
 
-      if (url != prefs.urls.daily) {
+      if (url === prefs.urls.hourly) {
+        // Filter by date in hourly view
+        newData = newData.filter(function (json: { date: string }) {
+          return json.date === selectedDate;
+        });
+
         for (let i = 0; i < 24; i++) {
           newLabels.push(i + ":00");
         }
       } else {
         for (let i = 0; i < data.length; i++) {
-          newLabels.push(data[i].date.toString());
+          newLabels.push(newData[i].date.toString());
         }
       }
 
       setLabels(newLabels);
-      setRevenueData(makeDataset("revenue"));
-      setImpressionsData(makeDataset("impressions"));
-      setClicksData(makeDataset("clicks"));
+      setRevenueData(makeDataset("revenue", newData));
+      setImpressionsData(makeDataset("impressions", newData));
+      setClicksData(makeDataset("clicks", newData));
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
@@ -125,7 +130,8 @@ const StatsChart = (props: { id: number; }) => {
           onClick: function (_evt, element) {
             if (element.length > 0 && data) {
               setUrl(prefs.urls.hourly); //@ts-ignore
-              setSelectedDate(data[element[0].index].date);
+              const date = data[element[0].index].date.toString();
+              setSelectedDate(date.substring(4, date.indexOf(":") - 8));
             }
           },
           onHover: (event, chartElement) => {
@@ -203,8 +209,8 @@ const StatsChart = (props: { id: number; }) => {
           <button
             className="-ml-24 absoulute bg-white/[0.06] transition-all text-white p-1 rounded-full"
             onClick={() => {
-              setSelectedDate(null);
               setUrl(prefs.urls.daily);
+              setSelectedDate(null);
             }}
           >
             <ArrowLeftIcon className="w-8 h-4" />
