@@ -26,7 +26,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
   const { data, isSuccess } = trpc.useQuery([url]);
 
-  const [processedData, setProcessedData]: [any, any, any] = 
+  const [processedData, setProcessedData]: typeof data =
     useLocalStorageState("ChartData" + props.id, data);
   const [selectedDate, setSelectedDate] = useLocalStorageState(
     "ChartSelectedDate" + props.id,
@@ -64,14 +64,16 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
           });
         }
 
+        // Update Y scale maximum for all Stats charts
+        const max = Math.max(...newData.map((o:typeof newData[0]) => o.events));
+        if (max > yMax) {
+          setYMax(max);
+        }
+
         // Import fetch data values into our data
         for (let i = 0; i < newData.length; i++) {
           //@ts-ignore
           hours[newData[i].hour].events = newData[i].events;
-          //@ts-ignore // Update Y scale maximum for all Events charts
-          if (hours[newData[i].hour].events > yMax)
-            //@ts-ignore
-            setYMax(hours[newData[i].hour].events);
         }
 
         newData = hours;

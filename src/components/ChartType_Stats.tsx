@@ -17,7 +17,9 @@ const prefs: { [key: string]: any } = {
 /**
  * Chart for plotting events
  **/
-const StatsChart = (props: { id: number }) => {
+const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
+  const [yMax, setYMax] = props.yAxisScale;
+
   const [url, setUrl] = useLocalStorageState("ChartURL:" + props.id, {
     defaultValue: prefs.urls.daily,
   });
@@ -82,6 +84,13 @@ const StatsChart = (props: { id: number }) => {
           return json.date === selectedDate;
         });
 
+        // Update Y scale maximum for all Stats charts
+        const max = Math.max(...newData.map((o:typeof newData[0]) => o.impressions));
+        if (max > yMax) {
+          setYMax(max);
+        }
+
+        // Format hour labels
         for (let i = 0; i < 24; i++) {
           newLabels.push(i + ":00");
         }
@@ -96,7 +105,7 @@ const StatsChart = (props: { id: number }) => {
       setImpressionsData(makeDataset("impressions", newData));
       setClicksData(makeDataset("clicks", newData));
     } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data && data.length]);
+  }, [data && data.length, setYMax]);
 
   return (
     <>
@@ -157,6 +166,7 @@ const StatsChart = (props: { id: number }) => {
           },
           scales: {
             y: {
+              suggestedMax: yMax,
               grid: { lineWidth: 2, borderWidth: 2 },
               beginAtZero: true, //@ts-ignore false alarm for logarithmic scale
               type: "logarithmic",
