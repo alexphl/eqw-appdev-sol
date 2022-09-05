@@ -79,7 +79,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
       setProcessedData(newData);
     } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, setYMax]);
+  }, [data && data.length, setYMax]);
 
   return (
     <>

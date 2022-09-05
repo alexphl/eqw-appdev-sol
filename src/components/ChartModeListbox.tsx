@@ -22,7 +22,6 @@ const ChartModeListbox = (props: {
       const index = charts.findIndex(
         (chart: { id: number }) => chart.id === id
       );
-      console.log("Setting Chart " + id + " mode to " + mode);
 
       if (index > -1) {
         const newArr = [...charts];
@@ -37,8 +36,8 @@ const ChartModeListbox = (props: {
     };
 
     if (selected === props.selected) return;
-    setChartMode(props.id, selected);
-  }, [selected, props]);
+    setChartMode(props.id, selected); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
 
   return (
     <div className="w-max font-bold text-zinc-300 self-center text-sm z-50 -ml-0.5">
