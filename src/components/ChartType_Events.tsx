@@ -105,8 +105,8 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
         options={{
           onClick: function (_evt, element) {
             if (!selectedDate && element.length > 0 && data) {
-              setUrl(prefs.urls.hourly); //@ts-ignore
-              const date = data[element[0].index].date.toString();
+              setUrl(prefs.urls.hourly); 
+              const date = data[element[0]!.index].date.toString();
               setSelectedDate(date.substring(4, date.indexOf(":") - 8));
             }
           },

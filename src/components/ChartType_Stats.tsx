@@ -32,19 +32,19 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
   );
 
   // Datasets
-  const [revenueData, setRevenueData]: [any, any, any] = //@ts-ignore
-    useLocalStorageState("ChartRevenueData" + props.id, null);
+  const [revenueData, setRevenueData]: typeof data =
+    useLocalStorageState("ChartRevenueData" + props.id);
 
-  const [impressionsData, setImpressionsData]: [any, any, any] = //@ts-ignore
-    useLocalStorageState("ChartImpressionsData" + props.id, null);
+  const [impressionsData, setImpressionsData]: typeof data =
+    useLocalStorageState("ChartImpressionsData" + props.id);
 
-  const [clicksData, setClicksData]: [any, any, any] = //@ts-ignore
-    useLocalStorageState("ChartClicksData" + props.id, null);
+  const [clicksData, setClicksData]: typeof data =
+    useLocalStorageState("ChartClicksData" + props.id);
 
-  const [labels, setLabels]: [any, any, any] = //@ts-ignore
-    useLocalStorageState("ChartLabels" + props.id, null);
+  const [labels, setLabels]: typeof data =
+    useLocalStorageState("ChartLabels" + props.id);
 
-  function makeDataset(target: string, baseData: any) {
+  function makeDataset(target: string, baseData: typeof data) {
     const newDataset = [];
 
     if (url === prefs.urls.daily) {
