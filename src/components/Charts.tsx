@@ -74,7 +74,7 @@ const Charts = () => {
   };
 
   return (
-    <div className="container max-w-3xl xl:max-w-4xl m-auto">
+    <div className="container max-w-3xl xl:max-w-4xl m-auto pt-20">
       {charts.map((Chart) => {
         return (
           <div

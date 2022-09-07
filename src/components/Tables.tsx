@@ -1,6 +1,6 @@
 const Tables = () => {
   return (
-    <div>
+    <div className="pt-20">
       Tables: Nothing here just yet, check again later.
     </div>
   );

@@ -13,8 +13,8 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="sm:px-6 py-6 transform-gpu transition-all" id="app">
-        <nav className="mb-6 flex content-center justify-center space-x-6">
+      <div className="transform-gpu transition-all" id="app">
+        <nav className="py-6 flex content-center justify-center space-x-6 top-0 w-screen absolute z-50">
           <Tabs
             components={components}
             selector={[selectedTab, setSelectedTab]}
