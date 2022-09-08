@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="transform-gpu transition-all" id="app">
-        <nav className="py-6 flex content-center justify-center space-x-6 top-0 w-screen absolute z-50">
+        <nav className="py-7 flex content-center justify-center space-x-6 top-0 w-screen absolute z-50">
           <Tabs
             components={components}
             selector={[selectedTab, setSelectedTab]}

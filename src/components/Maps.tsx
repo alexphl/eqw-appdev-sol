@@ -17,7 +17,7 @@ const MAP_VIEW = new MapView({ repeat: true });
 const MAP_STYLE =
   "https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json";
 const MAPBOX_ACCESS_TOKEN =
-  "pk.eyJ1IjoiYWxleHByb2toIiwiYSI6ImNsN3F1bGVkcDA5NXg0MHBwYjU4N2UybXoifQ.9tCQ4zaObKtYp6-lbkZWZw";
+  "pk.eyJ1IjoiYWxleHByb2toIiwiYSI6ImNsN3F2NWltbjA5YW4zdm52aDQ3ajV3Z2wifQ.ZTE4jSsHE9bMwu6uFWpz-w";
 
 /**
  * Geo visualizations panel
