@@ -72,8 +72,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
         // Import fetch data values into our data
         for (let i = 0; i < newData.length; i++) {
-          //@ts-ignore
-          hours[newData[i].hour].events = newData[i].events;
+          hours[newData[i].hour]!.events = newData[i].events;
         }
 
         newData = hours;

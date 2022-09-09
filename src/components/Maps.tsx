@@ -26,7 +26,9 @@ const Maps = () => {
   return (
     <>
       <div className="h-screen w-screen absolute m-0 top-0">
-        <div className="absolute text-center bottom-0 w-screen z-50 font-bold backdrop-blur-2xl p-6 saturate-200 bg-black/[0.5]">Work in progress</div>
+        <div className="absolute text-center bottom-0 w-screen z-50 font-bold backdrop-blur-2xl p-6 saturate-200 bg-black/[0.5]">
+          Work in progress
+        </div>
         <DeckGL
           views={MAP_VIEW}
           initialViewState={INITIAL_VIEW_STATE}

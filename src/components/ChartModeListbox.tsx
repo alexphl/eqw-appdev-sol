@@ -15,26 +15,25 @@ const ChartModeListbox = (props: {
   const modes = ["Events", "Stats"];
   const [selected, setSelected] = useState(props.selected);
 
+  const setChartMode = (id: number, mode: string) => {
+    const index = charts.findIndex((chart: { id: number }) => chart.id === id);
+
+    if (index > -1) {
+      const newArr = [...charts];
+      newArr[index]["mode"] = mode;
+      setCharts(newArr);
+    }
+
+    // Clear chart local storage
+    props.cleanupFunc(id);
+
+    return mode;
+  };
+
+  const [charts, setCharts] = props.chartController;
+
   // Checks if chart mode has to be updated
   useEffect(() => {
-    const [charts, setCharts] = props.chartController;
-    const setChartMode = (id: number, mode: string) => {
-      const index = charts.findIndex(
-        (chart: { id: number }) => chart.id === id
-      );
-
-      if (index > -1) {
-        const newArr = [...charts];
-        newArr[index]["mode"] = mode;
-        setCharts(newArr);
-      }
-
-      // Clear chart local storage
-      props.cleanupFunc(id);
-
-      return mode;
-    };
-
     if (selected === props.selected) return;
     setChartMode(props.id, selected); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
