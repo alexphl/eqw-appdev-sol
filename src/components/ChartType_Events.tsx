@@ -142,11 +142,17 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
           },
           scales: {
             y: {
-              grid: { lineWidth: 2, borderWidth: 2 },
+              grid: { lineWidth: 2, borderWidth: 2, drawTicks: false },
               beginAtZero: true,
               ticks: {
+                maxTicksLimit: 8,
+                sampleSize: 1,
+                maxRotation: 0,
+                minRotation: 0,
+                includeBounds: false,
+                mirror:true,
                 // Prevent rare runtime RangeError
-                callback: function (val:string | number) {
+                callback: function (val: string | number) {
                   return val;
                 },
               },
@@ -156,7 +162,8 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               title: {
                 display: true,
                 text:
-                  (selectedDate && "Hourly data for " + selectedDate) || "Daily data",
+                  (selectedDate && "Hourly data for " + selectedDate) ||
+                  "Daily data",
                 padding: 11,
                 font: {
                   size: 13.5,
