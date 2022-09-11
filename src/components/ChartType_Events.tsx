@@ -145,10 +145,10 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               grid: { lineWidth: 2, borderWidth: 2 },
               beginAtZero: true,
               ticks: {
-                maxTicksLimit: 6,
+                maxTicksLimit: 8,
                 // Prevent rare runtime RangeError
                 callback: function (val:string | number) {
-                  return val.toString();
+                  return val;
                 },
               },
               suggestedMax: yMax,
