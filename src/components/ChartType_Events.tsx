@@ -26,8 +26,10 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
 
   const { data, isSuccess } = trpc.useQuery([url]);
 
-  const [processedData, setProcessedData]: typeof data =
-    useLocalStorageState("ChartData" + props.id, data);
+  const [processedData, setProcessedData]: typeof data = useLocalStorageState(
+    "ChartData" + props.id,
+    data
+  );
   const [selectedDate, setSelectedDate] = useLocalStorageState(
     "ChartSelectedDate" + props.id,
     { defaultValue: null }
@@ -65,7 +67,9 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
         }
 
         // Update Y scale maximum for all Stats charts
-        const max = Math.max(...newData.map((o:typeof newData[0]) => o.events));
+        const max = Math.max(
+          ...newData.map((o: typeof newData[0]) => o.events)
+        );
         if (max > yMax) {
           setYMax(max);
         }
@@ -104,7 +108,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
         options={{
           onClick: function (_evt, element) {
             if (!selectedDate && element.length > 0 && data) {
-              setUrl(prefs.urls.hourly); 
+              setUrl(prefs.urls.hourly);
               const date = data[element[0]!.index].date.toString();
               setSelectedDate(date.substring(4, date.indexOf(":") - 8));
             }
@@ -146,6 +150,9 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               beginAtZero: true,
               ticks: {
                 maxTicksLimit: 6,
+                callback: function (val, _index) {
+                  return val;
+                },
               },
               min: 0,
               suggestedMax: yMax,

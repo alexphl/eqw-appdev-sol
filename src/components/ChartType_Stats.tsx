@@ -60,7 +60,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
     return newDataset;
   }
 
-  function handleLegendClick(e:any, legendItem:any, legend:any) {
+  function handleLegendClick(_e:any, legendItem:any, legend:any) {
     const index = legendItem.datasetIndex;
     const ci = legend.chart;
     if (ci.isDatasetVisible(index)) {
