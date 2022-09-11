@@ -120,6 +120,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
                 : "default";
           },
           spanGaps: true,
+          normalized: true,
           maintainAspectRatio: false,
           parsing: {
             xAxisKey: url === prefs.urls.daily ? "date" : "hour",
@@ -145,17 +146,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               grid: { lineWidth: 2, borderWidth: 2, drawTicks: false },
               beginAtZero: true,
               ticks: {
-                maxTicksLimit: 8,
-                sampleSize: 1,
-                maxRotation: 0,
-                autoSkip: false,
-                minRotation: 0,
-                includeBounds: false,
-                mirror:true,
-                // Prevent rare runtime RangeError
-                callback: function (val: string | number) {
-                  return val;
-                },
+                maxTicksLimit: 6,
               },
               suggestedMax: yMax,
             },
