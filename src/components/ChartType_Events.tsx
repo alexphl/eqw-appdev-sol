@@ -148,7 +148,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
                 maxTicksLimit: 6,
                 // Prevent rare runtime RangeError
                 callback: function (val:string | number) {
-                  return val;
+                  return val.toString();
                 },
               },
               suggestedMax: yMax,
