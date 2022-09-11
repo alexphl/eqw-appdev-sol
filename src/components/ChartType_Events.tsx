@@ -143,7 +143,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
           },
           scales: {
             y: {
-              grid: { lineWidth: 2, borderWidth: 2, drawTicks: false },
+              grid: { lineWidth: 2, borderWidth: 2 },
               beginAtZero: true,
               ticks: {
                 maxTicksLimit: 6,
