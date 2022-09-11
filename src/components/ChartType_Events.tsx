@@ -148,6 +148,12 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
             y: {
               grid: { lineWidth: 2, borderWidth: 2 },
               beginAtZero: true,
+              ticks: {
+                maxTicksLimit: 6,
+                callback: function (val, _index, _ticks) {
+                  return val;
+                },
+              },
               suggestedMax: yMax,
             },
             x: {
