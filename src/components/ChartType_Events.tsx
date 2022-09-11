@@ -150,9 +150,6 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               beginAtZero: true,
               ticks: {
                 maxTicksLimit: 6,
-                callback: function (val, _index) {
-                  return val;
-                },
               },
               min: 0,
               suggestedMax: yMax,
