@@ -163,7 +163,6 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
                 ? "pointer"
                 : "default";
           },
-          spanGaps: true,
           normalized: true,
           maintainAspectRatio: false,
           plugins: {
@@ -181,8 +180,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
           scales: {
             y: {
               suggestedMax: yMax,
-              grid: { lineWidth: 2, borderWidth: 2 },
-              beginAtZero: true, //@ts-ignore false alarm for logarithmic scale
+              grid: { lineWidth: 2, borderWidth: 2 }, //@ts-ignore false alarm for logarithmic scale
               type: "logarithmic",
               ticks: {
                 callback: function (label: any) {
