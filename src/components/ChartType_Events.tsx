@@ -99,8 +99,6 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               borderColor: ["rgba(220, 255, 255, 0.7)"],
               borderWidth: 1.5,
               borderDash: [5, 15],
-              borderJoinStyle: "round",
-              borderCapStyle: "round",
             },
           ],
         }}
@@ -114,7 +112,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
             }
           },
           onHover: (event, chartElement) => {
-            // @ts-ignore
+            // @ts-ignore //Chart.js types are a little outdated
             const target = event.native ? event.native.target : event.target;
             target.style.cursor =
               chartElement[0] && url === prefs.urls.daily
@@ -122,9 +120,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
                 : "default";
           },
           spanGaps: true,
-          normalized: true,
           maintainAspectRatio: false,
-          animations: {},
           parsing: {
             xAxisKey: url === prefs.urls.daily ? "date" : "hour",
             yAxisKey: url === prefs.urls.daily ? "_sum.events" : "events",
@@ -136,7 +132,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               hoverRadius: url === prefs.urls.hourly ? 10 : 15,
             },
             line: {
-              tension: 0.35,
+              tension: 0.3,
             },
           },
           plugins: {
@@ -150,7 +146,8 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               beginAtZero: true,
               ticks: {
                 maxTicksLimit: 6,
-                callback: function (val) {
+                // Prevent rare runtime RangeError
+                callback: function (val:string | number) {
                   return val;
                 },
               },
@@ -160,7 +157,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               title: {
                 display: true,
                 text:
-                  (selectedDate && "Hours for " + selectedDate) || "Daily data",
+                  (selectedDate && "Hourly data for " + selectedDate) || "Daily data",
                 padding: 11,
                 font: {
                   size: 13.5,
@@ -182,7 +179,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
         )}
         {url === prefs.urls.hourly && (
           <button
-            className="-ml-24 absoulute bg-white/[0.06] transition-all text-white p-1 rounded-full"
+            className="-ml-28 absoulute bg-white/[0.06] transition-all text-white p-1 rounded-full"
             onClick={() => {
               setSelectedDate(null);
               setUrl(prefs.urls.daily);

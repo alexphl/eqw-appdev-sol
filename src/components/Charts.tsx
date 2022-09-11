@@ -11,10 +11,8 @@ const EventsChart = dynamic(() => import("./ChartType_Events"));
 const StatsChart = dynamic(() => import("./ChartType_Stats"));
 
 // Set global chart styles
-Chart.defaults.font.size = 13;
-Chart.defaults.font.weight = "400";
-Chart.defaults.borderColor = "rgba(220, 255, 255, 0.04)";
-Chart.defaults.color = "#d4d4d8";
+Chart.defaults.borderColor = "rgba(200, 245, 255, 0.06)";
+Chart.defaults.color = "#eeeeee";
 
 // Flushes local storage chart state cache
 function clearChartStorage(id: number) {
