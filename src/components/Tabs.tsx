@@ -20,7 +20,7 @@ const Tabs = (props: { selector: [number, any]; components: string[] }) => {
               key={category}
               className={({ selected }) =>
                 classNames(
-                  "w-full rounded-xl py-1.5 text-sm font-bold leading-5",
+                  "w-full rounded-xl py-1.5 text-sm font-bold leading-5 outline-none",
                   selected
                     ? "bg-white/[0.1] shadow font-extrabold text-white/[0.95]"
                     : "text-zinc-500 hover:bg-white/[0.04] hover:text-white/[0.90]"
