@@ -148,6 +148,7 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
                 maxTicksLimit: 8,
                 sampleSize: 1,
                 maxRotation: 0,
+                autoSkip: false,
                 minRotation: 0,
                 includeBounds: false,
                 mirror:true,
