@@ -147,9 +147,6 @@ const EventsChart = (props: { id: number; yAxisScale: [number, any] }) => {
               beginAtZero: true,
               ticks: {
                 maxTicksLimit: 6,
-                callback: function (val, index) {
-                  return `${this.getLabelForValue(Number(val))}`;
-                },
               },
               suggestedMax: yMax,
             },
