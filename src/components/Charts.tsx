@@ -131,4 +131,4 @@ const Charts = () => {
   );
 };
 
-export default React.memo(Charts);
+export default Charts;

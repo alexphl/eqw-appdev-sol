@@ -2,6 +2,7 @@ import DeckGL from "@deck.gl/react/typed";
 import { MapView } from "@deck.gl/core/typed";
 import StaticMap from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import React from "react";
 
 // Viewport settings
 const INITIAL_VIEW_STATE = {
