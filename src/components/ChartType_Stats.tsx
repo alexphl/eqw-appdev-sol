@@ -180,7 +180,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
           scales: {
             y: {
               suggestedMax: yMax,
-              grid: { lineWidth: 2, borderWidth: 2 }, //@ts-ignore false alarm for logarithmic scale
+              grid: { lineWidth: 2 }, //@ts-ignore false alarm for logarithmic scale
               type: "logarithmic",
               ticks: {
                 callback: function (label: any) {
@@ -205,7 +205,7 @@ const StatsChart = (props: { id: number; yAxisScale: [number, any] }) => {
                 text:
                   (selectedDate && "Hourly data for " + selectedDate) || "Daily data",
               },
-              grid: { lineWidth: 2, borderWidth: 2 },
+              grid: { lineWidth: 2 },
               offset: true,
             },
           },

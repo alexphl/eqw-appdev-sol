@@ -2,7 +2,6 @@ import dynamic from "next/dynamic";
 import useLocalStorageState from "use-local-storage-state";
 import { XIcon, PlusIcon } from "@heroicons/react/solid";
 import ChartModeListbox from "./ChartModeListbox";
-import { Suspense } from "react";
 import { Chart, registerables } from "chart.js";
 import React from "react";
 
@@ -13,6 +12,7 @@ const StatsChart = dynamic(() => import("./ChartType_Stats"));
 // Set global chart styles
 Chart.defaults.borderColor = "rgba(200, 245, 255, 0.06)";
 Chart.defaults.color = "#eeeeee";
+//Chart.defaults.elements.bar.borderWidth = 2;
 
 // Flushes local storage chart state cache
 function clearChartStorage(id: number) {
@@ -99,10 +99,7 @@ const Charts = () => {
               </button>
             </div>
             <div className="px-3 sm:px-4 pb-1.5 -mt-1 h-[300px] sm:h-[380px] max-h-[85vh]">
-              <Suspense
-                fallback={<div className="m-auto w-min"> Loading... </div>}
-              >
-                {Chart.mode === "Events" ? (
+              {Chart.mode === "Events" ? (
                   <EventsChart
                     id={Chart.id}
                     yAxisScale={[eventsYMax, setEventsYmax]}
@@ -113,7 +110,6 @@ const Charts = () => {
                     yAxisScale={[statsYMax, setStatsYmax]}
                   />
                 )}
-              </Suspense>
             </div>
           </div>
         );
